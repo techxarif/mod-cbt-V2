@@ -265,13 +265,6 @@ if ($total_assignments > 0) {
         );
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| Include Header
-|--------------------------------------------------------------------------
-*/
-
 ?>
 
 <!DOCTYPE html>
@@ -295,7 +288,7 @@ if ($total_assignments > 0) {
 <style>
 
 /* =========================================================
-   RESET
+   RESET & BASE (OneSignal Dark Theme Refactor)
 ========================================================= */
 
 * {
@@ -307,7 +300,7 @@ body {
     margin: 0;
     padding: 0;
 
-    min-height: 100%;
+    min-height: 100vh;
 
     font-family:
         Inter,
@@ -317,127 +310,85 @@ body {
         Arial,
         sans-serif;
 
-    background: #090b16;
+    background: #111318;
 
-    color: #f4f5fa;
+    color: #e2e8f0;
 }
 
 
 /* =========================================================
-   APP
+   APP CONTAINER
 ========================================================= */
 
 .app {
-
     min-height: 100vh;
-
     display: flex;
-
-    background:
-        radial-gradient(
-            circle at 80% 0%,
-            rgba(81, 61, 180, 0.12),
-            transparent 28%
-        ),
-        #090b16;
+    background: #111318;
 }
 
 
 /* =========================================================
-   SIDEBAR
+   SIDEBAR (Clean Dark Variant)
 ========================================================= */
 
 .sidebar {
-
-    width: 235px;
-
+    width: 240px;
     min-height: 100vh;
-
-    background: #080a13;
-
-    border-right: 1px solid #1b1e2d;
-
-    padding: 22px 14px;
-
+    background: #181b22;
+    border-right: 1px solid #272b35;
+    padding: 20px 14px;
     position: fixed;
-
     left: 0;
     top: 0;
     bottom: 0;
-
     z-index: 20;
+    display: flex;
+    flex-direction: column;
 }
 
 
 .brand {
-
     display: flex;
-
     align-items: center;
-
     gap: 10px;
-
-    padding: 4px 10px 28px;
+    padding: 4px 8px 24px;
 }
 
 
 .brand-logo {
-
-    width: 34px;
-    height: 34px;
-
-    border-radius: 10px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #6657ff,
-            #8a5cff
-        );
-
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #4f46e5;
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     color: white;
-
-    font-weight: 900;
-
-    font-size: 17px;
-
-    box-shadow:
-        0 5px 20px rgba(100, 80, 255, 0.28);
+    font-weight: 800;
+    font-size: 16px;
 }
 
 
 .brand-text {
-
     display: flex;
-
     flex-direction: column;
 }
 
 
 .brand-name {
-
-    font-size: 17px;
-
-    font-weight: 800;
-
-    letter-spacing: 0.4px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: #f8fafc;
 }
 
 
 .brand-subtitle {
-
     font-size: 9px;
-
-    color: #777b91;
-
-    margin-top: 2px;
-
+    color: #64748b;
+    margin-top: 1px;
     letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 
@@ -446,84 +397,54 @@ body {
 ========================================================= */
 
 .nav-label {
-
-    color: #666b82;
-
+    color: #64748b;
     font-size: 10px;
-
     font-weight: 700;
-
     text-transform: uppercase;
-
-    letter-spacing: 1px;
-
-    padding: 0 11px 9px;
+    letter-spacing: 0.8px;
+    padding: 0 10px 8px;
 }
 
 
 .nav {
-
     display: flex;
-
     flex-direction: column;
-
-    gap: 3px;
+    gap: 2px;
+    flex: 1;
 }
 
 
 .nav a {
-
     text-decoration: none;
-
-    color: #969bad;
-
-    padding: 10px 11px;
-
-    border-radius: 8px;
-
+    color: #94a3b8;
+    padding: 9px 10px;
+    border-radius: 6px;
     font-size: 13px;
-
+    font-weight: 500;
     display: flex;
-
     align-items: center;
-
-    gap: 11px;
-
-    transition: 0.15s ease;
+    gap: 10px;
+    transition: all 0.15s ease;
 }
 
 
 .nav a:hover {
-
-    color: white;
-
-    background: #151827;
+    color: #f8fafc;
+    background: #212630;
 }
 
 
 .nav a.active {
-
-    color: white;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(98, 82, 255, 0.25),
-            rgba(98, 82, 255, 0.08)
-        );
-
-    box-shadow:
-        inset 3px 0 0 #6c5cff;
+    color: #ffffff;
+    background: #4f46e5;
+    font-weight: 600;
 }
 
 
 .nav-icon {
-
-    width: 20px;
-
+    width: 18px;
     text-align: center;
-
-    font-size: 15px;
+    font-size: 14px;
 }
 
 
@@ -532,527 +453,363 @@ body {
 ========================================================= */
 
 .sidebar-bottom {
-
-    position: absolute;
-
-    left: 14px;
-    right: 14px;
-    bottom: 18px;
-
-    border-top: 1px solid #1a1d2b;
-
-    padding-top: 15px;
+    border-top: 1px solid #272b35;
+    padding-top: 12px;
+    margin-top: auto;
 }
 
 
 .admin-mini {
-
     display: flex;
-
     align-items: center;
-
     gap: 9px;
-
-    padding: 8px;
+    padding: 6px 8px;
 }
 
 
 .admin-avatar {
-
-    width: 32px;
-    height: 32px;
-
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #6257ff,
-            #a25cff
-        );
-
+    background: #4f46e5;
     display: flex;
-
     align-items: center;
     justify-content: center;
-
-    font-size: 12px;
-
-    font-weight: 800;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
 }
 
 
 .admin-info {
-
     overflow: hidden;
 }
 
 
 .admin-name {
-
     font-size: 12px;
-
-    font-weight: 700;
-
+    font-weight: 600;
+    color: #f8fafc;
     white-space: nowrap;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
 }
 
 
 .admin-role {
-
     font-size: 10px;
-
-    color: #666b80;
-
-    margin-top: 2px;
+    color: #64748b;
+    margin-top: 1px;
 }
 
 
 /* =========================================================
-   MAIN
+   MAIN LAYOUT & TOPBAR
 ========================================================= */
 
 .main {
-
-    margin-left: 235px;
-
-    width: calc(100% - 235px);
-
+    margin-left: 240px;
+    width: calc(100% - 240px);
     min-height: 100vh;
+    background: #111318;
 }
 
 
-/* =========================================================
-   TOPBAR
-========================================================= */
-
 .topbar {
-
-    height: 68px;
-
-    border-bottom: 1px solid #1b1e2d;
-
+    height: 60px;
+    border-bottom: 1px solid #272b35;
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
-    padding: 0 27px;
-
-    background:
-        rgba(9,11,22,0.86);
-
-    backdrop-filter: blur(10px);
-
+    padding: 0 24px;
+    background: #181b22;
     position: sticky;
-
     top: 0;
-
     z-index: 10;
 }
 
 
 .breadcrumb {
-
-    color: #777c91;
-
+    color: #64748b;
     font-size: 12px;
 }
 
 
 .breadcrumb strong {
-
-    color: #e8e9f0;
-
+    color: #f8fafc;
     font-weight: 600;
 }
 
 
 .top-actions {
-
     display: flex;
-
     align-items: center;
-
-    gap: 8px;
+    gap: 10px;
 }
 
 
 .icon-button {
-
-    width: 34px;
-    height: 34px;
-
-    border: 1px solid #24283a;
-
-    background: #10121e;
-
-    color: #9da1b4;
-
-    border-radius: 8px;
-
+    width: 32px;
+    height: 32px;
+    border: 1px solid #272b35;
+    background: #181b22;
+    color: #94a3b8;
+    border-radius: 6px;
     cursor: pointer;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
+    text-decoration: none;
+    font-size: 13px;
+    transition: 0.15s;
 }
 
 
 .icon-button:hover {
-
     color: white;
-
-    border-color: #373c55;
+    background: #212630;
+    border-color: #3b4252;
 }
 
 
 .profile {
-
     display: flex;
-
     align-items: center;
-
     gap: 8px;
-
     margin-left: 6px;
-
-    padding-left: 10px;
-
-    border-left: 1px solid #24283a;
+    padding-left: 12px;
+    border-left: 1px solid #272b35;
 }
 
 
 .profile-avatar {
-
-    width: 32px;
-    height: 32px;
-
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #554cff,
-            #b85cff
-        );
-
+    background: #4f46e5;
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     font-size: 11px;
-
-    font-weight: 800;
+    font-weight: 700;
+    color: white;
 }
 
 
 .profile-text {
-
-    line-height: 14px;
+    line-height: 13px;
 }
 
 
 .profile-name {
-
     font-size: 11px;
-
-    font-weight: 700;
+    font-weight: 600;
+    color: #f8fafc;
 }
 
 
 .profile-role {
-
-    color: #686d82;
-
+    color: #64748b;
     font-size: 9px;
 }
 
 
 /* =========================================================
-   CONTENT
+   CONTENT AREA
 ========================================================= */
 
 .content {
-
-    padding: 28px;
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 
 .page-heading {
-
     display: flex;
-
     justify-content: space-between;
-
     align-items: flex-end;
-
-    margin-bottom: 23px;
+    margin-bottom: 20px;
 }
 
 
 .page-heading h1 {
-
     margin: 0;
-
-    font-size: 26px;
-
-    letter-spacing: -0.7px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: -0.4px;
 }
 
 
 .page-heading p {
-
-    margin: 6px 0 0;
-
-    color: #74798e;
-
+    margin: 4px 0 0;
+    color: #64748b;
     font-size: 12px;
 }
 
 
 .heading-actions {
-
     display: flex;
-
     gap: 8px;
 }
 
 
 .btn {
-
-    border: 1px solid #282c40;
-
-    background: #111420;
-
-    color: #c4c7d3;
-
-    border-radius: 7px;
-
-    padding: 9px 13px;
-
+    border: 1px solid #272b35;
+    background: #181b22;
+    color: #cbd5e1;
+    border-radius: 6px;
+    padding: 7px 12px;
     text-decoration: none;
-
-    font-size: 11px;
-
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.15s;
 }
 
 
 .btn:hover {
-
     color: white;
-
-    border-color: #454b68;
+    background: #212630;
+    border-color: #3b4252;
 }
 
 
 .btn-primary {
-
-    background:
-        linear-gradient(
-            135deg,
-            #6357ff,
-            #7456e9
-        );
-
-    border-color: transparent;
-
+    background: #4f46e5;
+    border-color: #4f46e5;
     color: white;
+    font-weight: 600;
+}
 
-    box-shadow:
-        0 7px 20px rgba(92, 77, 255, 0.2);
+
+.btn-primary:hover {
+    background: #4338ca;
+    border-color: #4338ca;
 }
 
 
 /* =========================================================
-   STAT CARDS
+   CARDS & STAT CARDS (OneSignal Metric Style)
 ========================================================= */
 
 .stats-grid {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
-
-    margin-bottom: 13px;
+    margin-bottom: 12px;
 }
 
 
 .card {
-
-    background:
-        linear-gradient(
-            145deg,
-            #111321,
-            #0f111d
-        );
-
-    border: 1px solid #202337;
-
-    border-radius: 11px;
-
-    box-shadow:
-        0 8px 25px rgba(0,0,0,0.12);
+    background: #181b22;
+    border: 1px solid #272b35;
+    border-radius: 8px;
 }
 
 
 .stat-card {
-
-    min-height: 130px;
-
-    padding: 17px;
-
+    padding: 16px;
     position: relative;
-
     overflow: hidden;
 }
 
 
 .stat-top {
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 }
 
 
 .stat-label {
-
-    color: #8a8fa3;
-
+    color: #94a3b8;
     font-size: 11px;
-
-    font-weight: 600;
+    font-weight: 500;
 }
 
 
 .stat-icon {
-
-    width: 28px;
-    height: 28px;
-
-    border-radius: 7px;
-
-    background: #181b2b;
-
-    color: #7f73ff;
-
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: #212630;
+    color: #818cf8;
     display: flex;
-
     align-items: center;
     justify-content: center;
-
-    font-size: 13px;
+    font-size: 12px;
 }
 
 
 .stat-value {
-
-    font-size: 26px;
-
-    font-weight: 750;
-
-    margin-top: 14px;
-
-    letter-spacing: -1px;
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 10px;
+    color: #f8fafc;
+    letter-spacing: -0.5px;
 }
 
 
 .stat-bottom {
-
     display: flex;
-
     align-items: center;
-
     gap: 6px;
-
-    margin-top: 7px;
-
-    font-size: 10px;
-
-    color: #6d7288;
+    margin-top: 6px;
+    font-size: 11px;
+    color: #64748b;
 }
 
 
 .stat-accent {
-
-    color: #45d5ae;
-
-    font-weight: 700;
+    color: #34d399;
+    font-weight: 600;
 }
 
 
 /* =========================================================
-   TWO COLUMN
+   ANALYTICS GRID (Two Column Split)
 ========================================================= */
 
 .analytics-grid {
-
     display: grid;
-
-    grid-template-columns:
-        minmax(0, 1.55fr)
-        minmax(300px, 1fr);
-
-    gap: 13px;
-
-    margin-bottom: 13px;
+    grid-template-columns: minmax(0, 1.6fr) minmax(320px, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
 }
 
 
-/* =========================================================
-   CARD HEADER
-========================================================= */
-
 .card-header {
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
-    padding: 17px 18px 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #272b35;
 }
 
 
 .card-title {
-
     font-size: 13px;
-
-    font-weight: 700;
+    font-weight: 600;
+    color: #f8fafc;
 }
 
 
 .card-subtitle {
-
-    color: #686d82;
-
-    font-size: 9px;
-
-    margin-top: 3px;
+    color: #64748b;
+    font-size: 11px;
+    margin-top: 2px;
 }
 
 
 .card-menu {
-
-    color: #666b82;
-
-    font-size: 16px;
+    color: #64748b;
+    font-size: 14px;
+    cursor: pointer;
 }
 
 
@@ -1061,354 +818,235 @@ body {
 ========================================================= */
 
 .chart-card {
-
-    min-height: 295px;
-
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 
 .chart-area {
-
-    height: 225px;
-
-    padding: 14px 18px 12px;
-
+    height: 230px;
+    padding: 16px;
     position: relative;
+    flex: 1;
 }
 
 
 .chart-grid {
-
     position: absolute;
-
-    left: 50px;
-    right: 17px;
-    top: 20px;
-    bottom: 35px;
-
+    left: 45px;
+    right: 16px;
+    top: 16px;
+    bottom: 32px;
     display: flex;
-
     flex-direction: column;
-
     justify-content: space-between;
 }
 
 
 .grid-line {
-
     height: 1px;
-
-    background: #1c2030;
+    background: #212630;
 }
 
 
 .bars {
-
     position: absolute;
-
-    left: 58px;
-    right: 20px;
-    bottom: 35px;
-    top: 30px;
-
+    left: 55px;
+    right: 16px;
+    bottom: 32px;
+    top: 20px;
     display: flex;
-
     align-items: flex-end;
-
     justify-content: space-between;
-
     gap: 8px;
 }
 
 
 .bar {
-
     width: 100%;
-
-    max-width: 30px;
-
-    border-radius: 5px 5px 2px 2px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #393b67,
-            #20233d
-        );
-
-    position: relative;
+    max-width: 28px;
+    border-radius: 3px 3px 0 0;
+    background: #272b35;
 }
 
 
 .bar.highlight {
-
-    background:
-        linear-gradient(
-            180deg,
-            #766cff,
-            #4b43c9
-        );
-
-    box-shadow:
-        0 0 18px rgba(105, 92, 255, 0.18);
+    background: #4f46e5;
 }
 
 
 .months {
-
     position: absolute;
-
-    left: 58px;
-    right: 20px;
-    bottom: 9px;
-
+    left: 55px;
+    right: 16px;
+    bottom: 8px;
     display: flex;
-
     justify-content: space-between;
-
-    color: #555b72;
-
-    font-size: 8px;
+    color: #64748b;
+    font-size: 10px;
 }
 
 
 .chart-tooltip {
-
     position: absolute;
-
-    left: 54%;
-
-    top: 36px;
-
-    background: #191c2c;
-
-    border: 1px solid #2b3045;
-
-    border-radius: 7px;
-
-    padding: 9px 11px;
-
-    font-size: 9px;
-
-    box-shadow:
-        0 10px 25px rgba(0,0,0,0.3);
+    right: 30px;
+    top: 24px;
+    background: #212630;
+    border: 1px solid #3b4252;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 10px;
 }
 
 
 .tooltip-label {
-
-    color: #747a91;
-
-    margin-bottom: 4px;
+    color: #94a3b8;
+    margin-bottom: 2px;
 }
 
 
 .tooltip-value {
-
-    font-weight: 800;
-
-    font-size: 12px;
+    font-weight: 700;
+    font-size: 11px;
+    color: #f8fafc;
 }
 
 
 /* =========================================================
-   EXAM STATUS
+   EXAM STATUS PANEL
 ========================================================= */
 
 .exam-card {
-
-    min-height: 295px;
-
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 
 .exam-content {
-
-    padding: 10px 18px 18px;
+    padding: 16px;
 }
 
 
 .exam-status {
-
-    padding: 11px;
-
-    border-radius: 8px;
-
-    background: #171a28;
-
-    border: 1px solid #24283b;
-
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: #212630;
+    border: 1px solid #272b35;
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
-    margin-bottom: 13px;
+    margin-bottom: 12px;
 }
 
 
 .exam-name {
-
     font-size: 12px;
-
-    font-weight: 700;
-
+    font-weight: 600;
+    color: #f8fafc;
     max-width: 65%;
-
     white-space: nowrap;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
 }
 
 
 .status-pill {
-
-    padding: 4px 8px;
-
-    border-radius: 20px;
-
-    font-size: 8px;
-
-    font-weight: 800;
-
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
     text-transform: uppercase;
 }
 
 
 .status-active {
-
-    background: rgba(45, 205, 154, 0.12);
-
-    color: #45d5ae;
+    background: rgba(52, 211, 153, 0.12);
+    color: #34d399;
 }
 
 
 .status-waiting {
-
-    background: rgba(242, 171, 70, 0.12);
-
-    color: #eab05d;
+    background: rgba(251, 191, 36, 0.12);
+    color: #fbbf24;
 }
 
 
 .status-draft {
-
-    background: #222537;
-
-    color: #858a9d;
+    background: #272b35;
+    color: #94a3b8;
 }
 
 
 .status-completed {
-
-    background: rgba(110, 105, 255, 0.12);
-
-    color: #8980ff;
+    background: rgba(129, 140, 248, 0.12);
+    color: #818cf8;
 }
 
 
 .exam-metrics {
-
     display: grid;
-
     grid-template-columns: repeat(3, 1fr);
-
-    gap: 7px;
-
-    margin-bottom: 16px;
+    gap: 8px;
+    margin-bottom: 14px;
 }
 
 
 .exam-metric {
-
-    padding: 11px 8px;
-
-    background: #141724;
-
-    border-radius: 7px;
-
+    padding: 10px 6px;
+    background: #212630;
+    border-radius: 6px;
     text-align: center;
+    border: 1px solid #272b35;
 }
 
 
 .exam-metric-value {
-
-    font-size: 17px;
-
-    font-weight: 800;
+    font-size: 15px;
+    font-weight: 700;
+    color: #f8fafc;
 }
 
 
 .exam-metric-label {
-
-    color: #666b80;
-
-    font-size: 8px;
-
-    margin-top: 3px;
+    color: #64748b;
+    font-size: 10px;
+    margin-top: 2px;
 }
 
 
 .progress-label {
-
     display: flex;
-
     justify-content: space-between;
-
-    color: #74798e;
-
-    font-size: 9px;
-
+    color: #94a3b8;
+    font-size: 11px;
     margin-bottom: 6px;
 }
 
 
 .progress {
-
     height: 6px;
-
-    background: #1d2130;
-
-    border-radius: 20px;
-
+    background: #212630;
+    border-radius: 3px;
     overflow: hidden;
 }
 
 
 .progress-fill {
-
     height: 100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            #6156ff,
-            #9873ff
-        );
-
+    background: #4f46e5;
     border-radius: inherit;
 }
 
 
 .exam-buttons {
-
     display: flex;
-
-    gap: 7px;
-
-    margin-top: 15px;
+    gap: 8px;
+    margin-top: 16px;
 }
 
 
 .exam-buttons a {
-
     flex: 1;
-
     text-align: center;
 }
 
@@ -1418,208 +1056,148 @@ body {
 ========================================================= */
 
 .lower-grid {
-
     display: grid;
-
-    grid-template-columns:
-        minmax(0, 1fr)
-        minmax(300px, 0.72fr);
-
-    gap: 13px;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.7fr);
+    gap: 12px;
 }
 
 
 /* =========================================================
-   RECENT TESTS
+   RECENT TESTS TABLE
 ========================================================= */
 
 .table-card {
-
     overflow: hidden;
 }
 
 
 .table-wrapper {
-
     overflow-x: auto;
 }
 
 
 table {
-
     width: 100%;
-
     border-collapse: collapse;
-
-    min-width: 620px;
+    min-width: 580px;
 }
 
 
 th {
-
     text-align: left;
-
-    color: #5e6479;
-
-    font-size: 9px;
-
-    font-weight: 700;
-
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 600;
     text-transform: uppercase;
-
     letter-spacing: 0.5px;
-
-    padding: 10px 17px;
-
-    border-bottom: 1px solid #202337;
+    padding: 10px 16px;
+    border-bottom: 1px solid #272b35;
+    background: #181b22;
 }
 
 
 td {
-
-    padding: 12px 17px;
-
-    border-bottom: 1px solid #181b29;
-
-    font-size: 10px;
-
-    color: #a9adbb;
+    padding: 11px 16px;
+    border-bottom: 1px solid #212630;
+    font-size: 12px;
+    color: #94a3b8;
 }
 
 
 td strong {
-
-    color: #e4e5eb;
-
-    font-size: 11px;
+    color: #f8fafc;
+    font-weight: 500;
 }
 
 
 .test-title {
-
-    max-width: 220px;
-
+    max-width: 200px;
     overflow: hidden;
-
     text-overflow: ellipsis;
-
     white-space: nowrap;
 }
 
 
 .small-status {
-
     display: inline-block;
-
-    padding: 4px 7px;
-
-    border-radius: 15px;
-
-    font-size: 8px;
-
-    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
 }
 
 
 /* =========================================================
-   ACTIVITY
+   ACTIVITY LIST
 ========================================================= */
 
 .activity-card {
-
-    min-height: 340px;
+    display: flex;
+    flex-direction: column;
 }
 
 
 .activity-list {
-
-    padding: 7px 18px 14px;
+    padding: 8px 16px;
 }
 
 
 .activity-item {
-
     display: flex;
-
+    align-items: center;
     gap: 10px;
-
-    padding: 12px 0;
-
-    border-bottom: 1px solid #191c2b;
+    padding: 10px 0;
+    border-bottom: 1px solid #212630;
 }
 
 
 .activity-item:last-child {
-
     border-bottom: none;
 }
 
 
 .activity-avatar {
-
-    width: 30px;
-    height: 30px;
-
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-
-    background: #191c30;
-
-    color: #8177ff;
-
+    background: #212630;
+    color: #818cf8;
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     font-size: 10px;
-
-    font-weight: 800;
-
+    font-weight: 700;
     flex-shrink: 0;
 }
 
 
 .activity-main {
-
     min-width: 0;
-
     flex: 1;
 }
 
 
 .activity-name {
-
-    font-size: 10px;
-
-    font-weight: 700;
-
-    color: #dddfe7;
+    font-size: 11px;
+    font-weight: 600;
+    color: #f8fafc;
 }
 
 
 .activity-description {
-
-    color: #686d82;
-
-    font-size: 9px;
-
-    margin-top: 3px;
-
+    color: #64748b;
+    font-size: 10px;
+    margin-top: 1px;
     white-space: nowrap;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
 }
 
 
 .activity-score {
-
-    color: #45d5ae;
-
-    font-weight: 800;
-
-    font-size: 11px;
+    color: #34d399;
+    font-weight: 700;
+    font-size: 12px;
 }
 
 
@@ -1628,135 +1206,97 @@ td strong {
 ========================================================= */
 
 .empty {
-
-    padding: 45px 20px;
-
+    padding: 40px 20px;
     text-align: center;
-
-    color: #666b80;
-
-    font-size: 11px;
+    color: #64748b;
+    font-size: 12px;
 }
 
 
 /* =========================================================
-   RESPONSIVE
+   RESPONSIVE DESIGN
 ========================================================= */
 
 @media (max-width: 1150px) {
-
     .stats-grid {
-
-        grid-template-columns:
-            repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .analytics-grid,
     .lower-grid {
-
         grid-template-columns: 1fr;
     }
 }
 
 
 @media (max-width: 800px) {
-
     .sidebar {
-
-        width: 70px;
-
-        padding: 18px 9px;
+        width: 64px;
+        padding: 16px 8px;
     }
 
     .brand {
-
         justify-content: center;
-
-        padding-left: 0;
-        padding-right: 0;
+        padding: 0 0 16px 0;
     }
 
     .brand-text,
     .nav-label,
     .nav a span:not(.nav-icon),
     .admin-info {
-
         display: none;
     }
 
     .nav a {
-
         justify-content: center;
-
-        padding: 11px;
+        padding: 10px;
     }
 
     .sidebar-bottom {
-
-        left: 9px;
-        right: 9px;
+        padding-top: 8px;
     }
 
     .admin-mini {
-
         justify-content: center;
     }
 
     .main {
-
-        margin-left: 70px;
-
-        width: calc(100% - 70px);
+        margin-left: 64px;
+        width: calc(100% - 64px);
     }
 
     .content {
-
-        padding: 18px;
+        padding: 16px;
     }
 }
 
 
 @media (max-width: 560px) {
-
     .stats-grid {
-
         grid-template-columns: 1fr;
     }
 
     .page-heading {
-
         align-items: flex-start;
-
         flex-direction: column;
-
-        gap: 14px;
+        gap: 12px;
     }
 
     .heading-actions {
-
         width: 100%;
     }
 
     .heading-actions .btn {
-
         flex: 1;
-
         text-align: center;
     }
 
     .topbar {
-
-        padding: 0 15px;
+        padding: 0 16px;
     }
 
     .profile-text {
-
         display: none;
-    }
-
-    .content {
-
-        padding: 13px;
     }
 }
 
@@ -2225,11 +1765,6 @@ td strong {
 
                     <?php
 
-                    /*
-                     * Simple visual distribution.
-                     * Values are generated from dashboard totals.
-                     */
-
                     $chart_values = [
                         max(8, min(100, $total_tests * 7)),
                         max(12, min(100, $total_submissions * 3)),
@@ -2480,7 +2015,7 @@ td strong {
 
                     <div class="empty">
 
-                        <div style="font-size:25px;margin-bottom:8px;">
+                        <div style="font-size:22px;margin-bottom:6px;">
                             ◌
                         </div>
 
@@ -2534,7 +2069,7 @@ td strong {
                     <a
                         href="tests.php"
                         class="btn"
-                        style="padding:6px 9px;"
+                        style="padding:5px 10px;"
                     >
                         View All
                     </a>
