@@ -1,0 +1,483 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    min-height: 100%;
+
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            #20234a,
+            #090b16 55%
+        );
+
+    color: #f3f4fa;
+}
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 30px 15px;
+}
+
+.installer {
+    width: 100%;
+    max-width: 650px;
+
+    text-align: center;
+}
+
+.logo,
+.success-icon {
+    width: 60px;
+    height: 60px;
+
+    margin: 0 auto 15px;
+
+    border-radius: 17px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6257ff,
+            #8b5cff
+        );
+
+    font-size: 27px;
+
+    font-weight: 900;
+
+    box-shadow:
+        0 10px 35px rgba(93, 78, 255, .3);
+}
+
+.success-icon {
+    background:
+        linear-gradient(
+            135deg,
+            #22b77c,
+            #38d49a
+        );
+
+    font-size: 28px;
+}
+
+h1 {
+    margin: 0;
+
+    font-size: 28px;
+
+    letter-spacing: -.7px;
+}
+
+.subtitle {
+    color: #777d96;
+
+    margin: 7px 0 25px;
+
+    font-size: 12px;
+}
+
+.step {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 20px;
+
+    color: #666b81;
+
+    font-size: 9px;
+}
+
+.step span {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.step span.active,
+.step span.done {
+    width: 25px;
+    height: 25px;
+
+    border-radius: 50%;
+
+    color: white;
+
+    background: #6559ff;
+
+    font-weight: 800;
+}
+
+.step span.done {
+    background: #28bb82;
+}
+
+.step i {
+    width: 35px;
+    height: 1px;
+
+    background: #292d42;
+}
+
+.card {
+    background:
+        linear-gradient(
+            145deg,
+            #121522,
+            #0e101b
+        );
+
+    border: 1px solid #24283b;
+
+    border-radius: 14px;
+
+    padding: 27px;
+
+    text-align: left;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.3);
+}
+
+.card h2 {
+    margin: 0;
+
+    font-size: 18px;
+}
+
+.description {
+    color: #777d91;
+
+    font-size: 11px;
+
+    line-height: 18px;
+
+    margin: 8px 0 20px;
+}
+
+.requirements {
+    border: 1px solid #22263a;
+
+    border-radius: 9px;
+
+    overflow: hidden;
+
+    margin-bottom: 18px;
+}
+
+.requirement {
+    padding: 12px 13px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    font-size: 11px;
+
+    border-bottom: 1px solid #1c2030;
+}
+
+.requirement:last-child {
+    border-bottom: 0;
+}
+
+.ok {
+    color: #42d4a6;
+
+    font-size: 10px;
+}
+
+.fail {
+    color: #ff6c76;
+
+    font-size: 10px;
+}
+
+.info-box {
+    background: #151827;
+
+    border: 1px solid #252a40;
+
+    border-radius: 8px;
+
+    padding: 13px;
+
+    color: #8d92a6;
+
+    font-size: 10px;
+
+    line-height: 18px;
+
+    margin: 17px 0;
+}
+
+.info-box strong {
+    color: #d8dae3;
+}
+
+.info-box ul {
+    margin: 7px 0 0;
+
+    padding-left: 17px;
+}
+
+code {
+    color: #9a91ff;
+}
+
+.button {
+    display: block;
+
+    width: 100%;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    padding: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6257ff,
+            #7657e9
+        );
+
+    color: white;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 22px rgba(94,78,255,.2);
+}
+
+.button:hover {
+    filter: brightness(1.08);
+}
+
+.button.disabled {
+    opacity: .4;
+
+    cursor: not-allowed;
+}
+
+.error {
+    padding: 11px 13px;
+
+    border-radius: 8px;
+
+    background: rgba(255,75,85,.08);
+
+    border: 1px solid rgba(255,75,85,.3);
+
+    color: #ff8188;
+
+    font-size: 11px;
+
+    margin-bottom: 17px;
+}
+
+.section-title {
+    color: #a6aabc;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .7px;
+
+    margin: 22px 0 10px;
+}
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 13px;
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+.field label {
+    display: block;
+
+    color: #777d91;
+
+    font-size: 10px;
+
+    margin-bottom: 5px;
+}
+
+.field input {
+    width: 100%;
+
+    height: 38px;
+
+    border: 1px solid #292e42;
+
+    border-radius: 7px;
+
+    outline: none;
+
+    background: #0b0d17;
+
+    color: white;
+
+    padding: 0 10px;
+
+    font-size: 11px;
+}
+
+.field input:focus {
+    border-color: #665aff;
+
+    box-shadow:
+        0 0 0 2px rgba(102,90,255,.1);
+}
+
+.success-card {
+    text-align: center;
+}
+
+.success-list {
+    text-align: left;
+
+    border: 1px solid #22273a;
+
+    border-radius: 9px;
+
+    overflow: hidden;
+
+    margin: 20px 0;
+}
+
+.success-list div {
+    padding: 10px 13px;
+
+    border-bottom: 1px solid #1d2130;
+
+    color: #9ba0b2;
+
+    font-size: 11px;
+}
+
+.success-list div:last-child {
+    border-bottom: 0;
+}
+
+.success-list span {
+    color: #42d4a6;
+
+    font-weight: 800;
+
+    margin-right: 8px;
+}
+
+.credentials {
+    margin-bottom: 20px;
+
+    border: 1px solid #22273a;
+
+    border-radius: 9px;
+
+    overflow: hidden;
+}
+
+.credential-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 11px 13px;
+
+    font-size: 10px;
+
+    color: #777d91;
+
+    border-bottom: 1px solid #1d2130;
+}
+
+.credential-row:last-child {
+    border-bottom: 0;
+}
+
+.credential-row strong {
+    color: #dddfe8;
+}
+
+.footer {
+    color: #4e5369;
+
+    font-size: 9px;
+
+    margin-top: 18px;
+}
+
+@media (max-width: 550px) {
+
+    .card {
+        padding: 20px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .field.full {
+        grid-column: auto;
+    }
+
+    .step {
+        gap: 4px;
+    }
+
+    .step i {
+        width: 20px;
+    }
+}
