@@ -48,12 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
 
-            /*
-            |--------------------------------------------------------------------------
-            | CHECK USERNAME
-            |--------------------------------------------------------------------------
-            */
-
             $stmt = $pdo->prepare("
                 SELECT id
                 FROM teachers
@@ -68,12 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = 'This username is already registered.';
 
             } else {
-
-                /*
-                |--------------------------------------------------------------------------
-                | CREATE TEACHER
-                |--------------------------------------------------------------------------
-                */
 
                 $password_hash = password_hash(
                     $password,
@@ -101,12 +89,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $name
                 ]);
 
-                $success = 'Teacher account created successfully. You can now login.';
+                $success =
+                    'Teacher account created successfully. You can now login.';
             }
 
         } catch (PDOException $e) {
 
-            $error = 'Unable to create account. Please try again.';
+            $error =
+                'Unable to create account. Please try again.';
         }
     }
 }
@@ -127,58 +117,733 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <title>MODUS CBT - Teacher Signup</title>
 
+
     <style>
 
         * {
             box-sizing: border-box;
         }
 
+
         body {
+
             margin: 0;
+
             min-height: 100vh;
 
             display: flex;
+
             align-items: center;
+
             justify-content: center;
 
-            background: #f4f5f7;
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
 
-            font-family: Arial, sans-serif;
+            background:
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(34,197,94,0.09),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 85% 15%,
+                    rgba(59,130,246,0.09),
+                    transparent 32%
+                ),
+                #05080b;
+
+            color: #f8fafc;
+
+            overflow: hidden;
         }
 
-        .signup-box {
 
-            width: 380px;
+        /* =====================================================
+           BACKGROUND
+           ===================================================== */
 
-            background: white;
+        .background {
 
-            padding: 35px;
+            position: fixed;
 
-            border-radius: 12px;
+            inset: 0;
+
+            overflow: hidden;
+
+            pointer-events: none;
+
+            z-index: 0;
+        }
+
+
+        .grid {
+
+            position: absolute;
+
+            inset: 0;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                );
+
+            background-size: 55px 55px;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent 90%
+                );
+        }
+
+
+        .orb {
+
+            position: absolute;
+
+            border-radius: 50%;
+
+            filter: blur(90px);
+
+            opacity: .16;
+
+            animation:
+                float 12s ease-in-out infinite;
+        }
+
+
+        .orb-one {
+
+            width: 330px;
+
+            height: 330px;
+
+            background: #22c55e;
+
+            top: -130px;
+
+            left: -110px;
+        }
+
+
+        .orb-two {
+
+            width: 360px;
+
+            height: 360px;
+
+            background: #2563eb;
+
+            right: -150px;
+
+            top: 15%;
+
+            animation-delay: -4s;
+        }
+
+
+        .orb-three {
+
+            width: 280px;
+
+            height: 280px;
+
+            background: #8b5cf6;
+
+            bottom: -130px;
+
+            left: 35%;
+
+            animation-delay: -8s;
+        }
+
+
+        @keyframes float {
+
+            0%,
+            100% {
+
+                transform:
+                    translate(0,0)
+                    scale(1);
+            }
+
+            50% {
+
+                transform:
+                    translate(30px,-25px)
+                    scale(1.08);
+            }
+        }
+
+
+        /* =====================================================
+           TOP BAR
+           ===================================================== */
+
+        .topbar {
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            right: 0;
+
+            height: 82px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding:
+                0
+                clamp(20px,5vw,70px);
+
+            z-index: 5;
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+        }
+
+
+        .brand-mark {
+
+            width: 38px;
+
+            height: 38px;
+
+            border-radius: 11px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #22c55e,
+                    #16a34a
+                );
+
+            color: #031109;
+
+            font-size: 17px;
+
+            font-weight: 900;
 
             box-shadow:
-                0 10px 35px rgba(0,0,0,0.08);
+                0 0 30px
+                rgba(34,197,94,.25);
         }
 
-        .logo {
 
-            text-align: center;
+        .brand-name {
 
-            font-size: 26px;
+            font-size: 18px;
+
+            font-weight: 750;
+
+            letter-spacing: -.4px;
+        }
+
+
+        .brand-sub {
+
+            color: #64748b;
+
+            font-size: 11px;
+
+            margin-left: 4px;
+        }
+
+
+        .online {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 8px 12px;
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            background:
+                rgba(255,255,255,.025);
+
+            border-radius: 999px;
+
+            color: #94a3b8;
+
+            font-size: 11px;
+        }
+
+
+        .online-dot {
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+
+            box-shadow:
+                0 0 12px #22c55e;
+
+            animation: pulse 2s infinite;
+        }
+
+
+        @keyframes pulse {
+
+            0% {
+                box-shadow:
+                    0 0 0 0
+                    rgba(34,197,94,.45);
+            }
+
+            70% {
+                box-shadow:
+                    0 0 0 8px
+                    rgba(34,197,94,0);
+            }
+
+            100% {
+                box-shadow:
+                    0 0 0 0
+                    rgba(34,197,94,0);
+            }
+        }
+
+
+        /* =====================================================
+           MAIN
+           ===================================================== */
+
+        .page {
+
+            position: relative;
+
+            z-index: 2;
+
+            width:
+                min(1120px, calc(100% - 40px));
+
+            min-height: 100vh;
+
+            margin: auto;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                430px;
+
+            align-items: center;
+
+            gap: 90px;
+
+            padding-top: 45px;
+        }
+
+
+        /* =====================================================
+           LEFT SIDE
+           ===================================================== */
+
+        .intro {
+
+            animation:
+                appear .8s ease both;
+        }
+
+
+        .eyebrow {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 7px 11px;
+
+            border:
+                1px solid rgba(34,197,94,.18);
+
+            background:
+                rgba(34,197,94,.06);
+
+            border-radius: 999px;
+
+            color: #86efac;
+
+            font-size: 10px;
 
             font-weight: 700;
 
-            margin-bottom: 8px;
+            text-transform: uppercase;
+
+            letter-spacing: .6px;
         }
+
+
+        .eyebrow-dot {
+
+            width: 5px;
+
+            height: 5px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+        }
+
+
+        h1 {
+
+            margin: 22px 0 0;
+
+            max-width: 650px;
+
+            font-size:
+                clamp(48px,6vw,72px);
+
+            line-height: .98;
+
+            letter-spacing: -4px;
+
+            font-weight: 800;
+        }
+
+
+        .gradient {
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #ffffff 15%,
+                    #94a3b8 52%,
+                    #22c55e 95%
+                );
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+            color: transparent;
+        }
+
+
+        .description {
+
+            max-width: 560px;
+
+            margin-top: 24px;
+
+            color: #8190a3;
+
+            font-size: 15px;
+
+            line-height: 1.75;
+        }
+
+
+        .features {
+
+            display: flex;
+
+            gap: 28px;
+
+            margin-top: 30px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .feature {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color: #64748b;
+
+            font-size: 11px;
+        }
+
+
+        .feature-icon {
+
+            width: 26px;
+
+            height: 26px;
+
+            border-radius: 8px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid rgba(255,255,255,.07);
+
+            color: #4ade80;
+        }
+
+
+        /* =====================================================
+           CARD
+           ===================================================== */
+
+        .card-wrapper {
+
+            animation:
+                appear .8s .12s ease both;
+        }
+
+
+        .signup-card {
+
+            position: relative;
+
+            padding: 31px;
+
+            border-radius: 22px;
+
+            border:
+                1px solid rgba(255,255,255,.09);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(19,27,34,.90),
+                    rgba(7,11,15,.96)
+                );
+
+            backdrop-filter: blur(22px);
+
+            box-shadow:
+                0 35px 100px rgba(0,0,0,.50),
+                inset 0 1px 0
+                rgba(255,255,255,.04);
+
+            overflow: hidden;
+
+            transition:
+                transform .35s ease,
+                border-color .35s ease;
+        }
+
+
+        .signup-card:hover {
+
+            transform: translateY(-4px);
+
+            border-color:
+                rgba(34,197,94,.20);
+        }
+
+
+        .card-glow {
+
+            position: absolute;
+
+            width: 190px;
+
+            height: 190px;
+
+            right: -80px;
+
+            top: -80px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+
+            filter: blur(75px);
+
+            opacity: .07;
+
+            pointer-events: none;
+        }
+
+
+        .card-header {
+
+            position: relative;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .title {
+
+            font-size: 20px;
+
+            font-weight: 750;
+
+            letter-spacing: -.3px;
+        }
+
 
         .subtitle {
 
-            text-align: center;
+            margin-top: 6px;
 
-            color: #777;
+            color: #64748b;
 
-            margin-bottom: 30px;
+            font-size: 11px;
         }
+
+
+        .signup-icon {
+
+            width: 42px;
+
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background:
+                rgba(34,197,94,.09);
+
+            border:
+                1px solid rgba(34,197,94,.16);
+
+            color: #4ade80;
+
+            font-size: 18px;
+        }
+
+
+        /* =====================================================
+           MESSAGES
+           ===================================================== */
+
+        .error {
+
+            background:
+                rgba(239,68,68,.08);
+
+            border:
+                1px solid rgba(239,68,68,.20);
+
+            color: #fca5a5;
+
+            padding: 11px 13px;
+
+            border-radius: 10px;
+
+            margin-bottom: 17px;
+
+            font-size: 12px;
+
+            animation:
+                shake .35s ease;
+        }
+
+
+        .success {
+
+            background:
+                rgba(34,197,94,.08);
+
+            border:
+                1px solid rgba(34,197,94,.20);
+
+            color: #86efac;
+
+            padding: 11px 13px;
+
+            border-radius: 10px;
+
+            margin-bottom: 17px;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+
+        /* =====================================================
+           FORM
+           ===================================================== */
+
+        .field {
+
+            margin-bottom: 15px;
+
+            position: relative;
+        }
+
 
         label {
 
@@ -186,217 +851,834 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             margin-bottom: 7px;
 
-            font-weight: 600;
+            color: #cbd5e1;
+
+            font-size: 12px;
+
+            font-weight: 650;
         }
+
+
+        .input-wrap {
+
+            position: relative;
+        }
+
+
+        .input-icon {
+
+            position: absolute;
+
+            left: 13px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: #475569;
+
+            font-size: 13px;
+
+            pointer-events: none;
+        }
+
 
         input {
 
             width: 100%;
 
-            padding: 12px;
+            height: 45px;
 
-            margin-bottom: 18px;
+            padding:
+                0
+                13px
+                0
+                38px;
 
-            border: 1px solid #ddd;
+            border:
+                1px solid #263241;
 
-            border-radius: 7px;
+            border-radius: 10px;
 
-            font-size: 15px;
-        }
+            background:
+                rgba(4,8,12,.75);
 
-        input:focus {
+            color: #f8fafc;
+
+            font-size: 13px;
 
             outline: none;
 
-            border-color: #111;
+            transition:
+                border-color .25s ease,
+                box-shadow .25s ease,
+                background .25s ease;
         }
 
-        button {
+
+        input::placeholder {
+
+            color: #475569;
+        }
+
+
+        input:focus {
+
+            border-color:
+                rgba(34,197,94,.55);
+
+            background:
+                rgba(4,8,12,.95);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(34,197,94,.07);
+        }
+
+
+        /* =====================================================
+           BUTTON
+           ===================================================== */
+
+        .signup-button {
+
+            position: relative;
 
             width: 100%;
 
-            padding: 13px;
+            height: 48px;
+
+            margin-top: 5px;
 
             border: none;
 
-            border-radius: 7px;
+            border-radius: 10px;
 
-            background: #111;
+            background:
+                linear-gradient(
+                    135deg,
+                    #22c55e,
+                    #16a34a
+                );
 
-            color: white;
+            color: #031109;
 
-            font-size: 15px;
+            font-size: 13px;
+
+            font-weight: 800;
 
             cursor: pointer;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 10px 30px
+                rgba(34,197,94,.14);
+
+            transition:
+                transform .25s ease,
+                box-shadow .25s ease;
         }
 
-        button:hover {
 
-            background: #333;
+        .signup-button::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+
+            left: -100%;
+
+            width: 70%;
+
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,.30),
+                    transparent
+                );
+
+            transform: skewX(-20deg);
+
+            transition:
+                left .55s ease;
         }
 
-        .error {
 
-            background: #ffecec;
+        .signup-button:hover {
 
-            color: #c00;
+            transform: translateY(-2px);
 
-            padding: 10px;
-
-            border-radius: 7px;
-
-            margin-bottom: 18px;
-
-            font-size: 14px;
+            box-shadow:
+                0 14px 35px
+                rgba(34,197,94,.22);
         }
 
-        .success {
 
-            background: #ecfdf3;
+        .signup-button:hover::before {
 
-            color: #087443;
-
-            padding: 10px;
-
-            border-radius: 7px;
-
-            margin-bottom: 18px;
-
-            font-size: 14px;
+            left: 140%;
         }
+
+
+        .signup-button:active {
+
+            transform: translateY(0);
+        }
+
+
+        /* =====================================================
+           LOGIN
+           ===================================================== */
+
+        .divider {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin:
+                20px 0
+                17px;
+
+            color: #475569;
+
+            font-size: 10px;
+        }
+
+
+        .divider::before,
+        .divider::after {
+
+            content: "";
+
+            flex: 1;
+
+            height: 1px;
+
+            background:
+                rgba(255,255,255,.06);
+        }
+
 
         .login-link {
 
             text-align: center;
 
-            margin-top: 20px;
+            color: #64748b;
 
-            font-size: 13px;
-
-            color: #777;
+            font-size: 11px;
         }
+
 
         .login-link a {
 
-            color: #111;
+            color: #cbd5e1;
 
-            font-weight: 600;
+            font-weight: 700;
 
             text-decoration: none;
+
+            margin-left: 3px;
+
+            transition:
+                color .2s ease;
         }
+
 
         .login-link a:hover {
 
-            text-decoration: underline;
+            color: #4ade80;
+        }
+
+
+        .secure {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-top: 17px;
+
+            color: #475569;
+
+            font-size: 9px;
+        }
+
+
+        .secure-dot {
+
+            width: 5px;
+
+            height: 5px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+
+            box-shadow:
+                0 0 8px #22c55e;
+        }
+
+
+        /* =====================================================
+           BACK
+           ===================================================== */
+
+        .back {
+
+            position: fixed;
+
+            left: 25px;
+
+            bottom: 22px;
+
+            z-index: 5;
+
+            color: #475569;
+
+            text-decoration: none;
+
+            font-size: 11px;
+
+            transition:
+                color .2s ease;
+        }
+
+
+        .back:hover {
+
+            color: #94a3b8;
+        }
+
+
+        /* =====================================================
+           ANIMATION
+           ===================================================== */
+
+        @keyframes appear {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(22px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media (max-width: 850px) {
+
+            body {
+
+                overflow-y: auto;
+            }
+
+
+            .page {
+
+                grid-template-columns: 1fr;
+
+                gap: 35px;
+
+                padding:
+                    110px 0
+                    60px;
+            }
+
+
+            .intro {
+
+                text-align: center;
+            }
+
+
+            .eyebrow {
+
+                margin: auto;
+            }
+
+
+            h1 {
+
+                font-size: 52px;
+
+                letter-spacing: -3px;
+            }
+
+
+            .description {
+
+                margin-left: auto;
+
+                margin-right: auto;
+            }
+
+
+            .features {
+
+                justify-content: center;
+            }
+
+
+            .card-wrapper {
+
+                width:
+                    min(430px,100%);
+
+                margin: auto;
+            }
+
+        }
+
+
+        @media (max-width: 520px) {
+
+            .topbar {
+
+                padding:
+                    0
+                    18px;
+            }
+
+
+            .online {
+
+                display: none;
+            }
+
+
+            .page {
+
+                width:
+                    calc(100% - 28px);
+            }
+
+
+            h1 {
+
+                font-size: 43px;
+
+                letter-spacing: -2.5px;
+            }
+
+
+            .description {
+
+                font-size: 13px;
+            }
+
+
+            .signup-card {
+
+                padding: 23px;
+            }
+
+
+            .back {
+
+                display: none;
+            }
+
         }
 
     </style>
 
 </head>
 
+
 <body>
 
-<div class="signup-box">
 
-    <div class="logo">
-        MODUS CBT
-    </div>
+<!-- =========================================================
+     BACKGROUND
+     ========================================================= -->
 
-    <div class="subtitle">
-        Create Teacher Account
-    </div>
+<div class="background">
 
+    <div class="grid"></div>
 
-    <?php if ($error): ?>
+    <div class="orb orb-one"></div>
 
-        <div class="error">
-            <?= htmlspecialchars($error) ?>
-        </div>
+    <div class="orb orb-two"></div>
 
-    <?php endif; ?>
-
-
-    <?php if ($success): ?>
-
-        <div class="success">
-            <?= htmlspecialchars($success) ?>
-        </div>
-
-    <?php endif; ?>
-
-
-    <form method="POST">
-
-        <label>
-            Full Name
-        </label>
-
-        <input
-            type="text"
-            name="name"
-            placeholder="Enter your full name"
-            autocomplete="name"
-            required
-        >
-
-
-        <label>
-            Username
-        </label>
-
-        <input
-            type="text"
-            name="username"
-            placeholder="Choose a username"
-            autocomplete="username"
-            required
-        >
-
-
-        <label>
-            Password
-        </label>
-
-        <input
-            type="password"
-            name="password"
-            placeholder="Minimum 6 characters"
-            autocomplete="new-password"
-            required
-        >
-
-
-        <label>
-            Confirm Password
-        </label>
-
-        <input
-            type="password"
-            name="confirm_password"
-            placeholder="Re-enter password"
-            autocomplete="new-password"
-            required
-        >
-
-
-        <button type="submit">
-            Create Teacher Account
-        </button>
-
-    </form>
-
-
-    <div class="login-link">
-
-        Already have an account?
-
-        <a href="login.php">
-            Login
-        </a>
-
-    </div>
+    <div class="orb orb-three"></div>
 
 </div>
+
+
+<!-- =========================================================
+     TOP BAR
+     ========================================================= -->
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="brand-mark">
+            M
+        </div>
+
+        <div class="brand-name">
+
+            MODUS
+
+            <span class="brand-sub">
+                CBT
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="online">
+
+        <span class="online-dot"></span>
+
+        System Online
+
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main class="page">
+
+
+    <!-- =====================================================
+         INTRO
+         ===================================================== -->
+
+    <section class="intro">
+
+
+        <div class="eyebrow">
+
+            <span class="eyebrow-dot"></span>
+
+            Teacher Registration
+
+        </div>
+
+
+        <h1>
+
+            <span class="gradient">
+                Build.
+            </span>
+
+            <br>
+
+            Conduct.
+
+            <br>
+
+            <span class="gradient">
+                Evaluate.
+            </span>
+
+        </h1>
+
+
+        <p class="description">
+
+            Create your MODUS CBT teacher account and
+            get access to the complete examination
+            management workspace.
+
+        </p>
+
+
+        <div class="features">
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    ✓
+                </div>
+
+                Create Tests
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    +
+                </div>
+
+                Manage Students
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    ↗
+                </div>
+
+                Track Results
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         SIGNUP CARD
+         ===================================================== -->
+
+    <section class="card-wrapper">
+
+
+        <div class="signup-card">
+
+
+            <div class="card-glow"></div>
+
+
+            <div class="card-header">
+
+
+                <div>
+
+                    <div class="title">
+                        Create account
+                    </div>
+
+                    <div class="subtitle">
+                        Register your teacher workspace
+                    </div>
+
+                </div>
+
+
+                <div class="signup-icon">
+                    +
+                </div>
+
+
+            </div>
+
+
+            <?php if ($error): ?>
+
+                <div class="error">
+
+                    <?= htmlspecialchars($error) ?>
+
+                </div>
+
+            <?php endif; ?>
+
+
+            <?php if ($success): ?>
+
+                <div class="success">
+
+                    <?= htmlspecialchars($success) ?>
+
+                </div>
+
+            <?php endif; ?>
+
+
+            <form method="POST">
+
+
+                <div class="field">
+
+                    <label>
+                        Full Name
+                    </label>
+
+                    <div class="input-wrap">
+
+                        <span class="input-icon">
+                            ◉
+                        </span>
+
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Enter your full name"
+                            autocomplete="name"
+                            value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Username
+                    </label>
+
+                    <div class="input-wrap">
+
+                        <span class="input-icon">
+                            @
+                        </span>
+
+                        <input
+                            type="text"
+                            name="username"
+                            placeholder="Choose a username"
+                            autocomplete="username"
+                            value="<?= htmlspecialchars($_POST['username'] ?? '') ?>"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <div class="input-wrap">
+
+                        <span class="input-icon">
+                            •
+                        </span>
+
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Minimum 6 characters"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Confirm Password
+                    </label>
+
+                    <div class="input-wrap">
+
+                        <span class="input-icon">
+                            •
+                        </span>
+
+                        <input
+                            type="password"
+                            name="confirm_password"
+                            placeholder="Re-enter your password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="signup-button"
+                >
+
+                    Create Teacher Account
+
+                </button>
+
+
+            </form>
+
+
+            <div class="divider">
+                OR
+            </div>
+
+
+            <div class="login-link">
+
+                Already have an account?
+
+                <a href="login.php">
+                    Login
+                </a>
+
+            </div>
+
+
+            <div class="secure">
+
+                <span class="secure-dot"></span>
+
+                Passwords are securely hashed
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+<a
+    href="login.php"
+    class="back"
+>
+    ← Back to Teacher Login
+</a>
+
 
 </body>
 

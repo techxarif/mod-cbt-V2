@@ -451,7 +451,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -466,147 +465,719 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 >
 
 <title>
-    Edit Question - MODUS CBT
+    Edit Question — MODUS CBT
 </title>
 
 
 <style>
+
+/* =========================================================
+   MODUS CINEMATIC QUESTION EDITOR
+   ========================================================= */
+
+:root {
+
+    --bg: #05070b;
+
+    --panel: rgba(14, 18, 28, 0.84);
+
+    --panel-strong: rgba(17, 22, 33, 0.96);
+
+    --border: rgba(255,255,255,0.085);
+
+    --border-hover: rgba(255,255,255,0.15);
+
+    --text: #f4f7fb;
+
+    --muted: #8d98aa;
+
+    --muted-2: #657084;
+
+    --blue: #5b8cff;
+
+    --purple: #8b5cf6;
+
+    --green: #45d483;
+
+    --danger: #ff7187;
+
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
 
 * {
     box-sizing: border-box;
 }
 
 
-body {
-    margin: 0;
-    background: #f5f7f9;
-    color: #17202a;
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+html {
+    scroll-behavior: smooth;
 }
 
 
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+
+        radial-gradient(
+            circle at 10% 5%,
+            rgba(91,140,255,0.13),
+            transparent 28%
+        ),
+
+        radial-gradient(
+            circle at 90% 15%,
+            rgba(139,92,246,0.12),
+            transparent 28%
+        ),
+
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(60,100,255,0.07),
+            transparent 38%
+        ),
+
+        var(--bg);
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   AMBIENT GLOW
+   ========================================================= */
+
+body::before,
+body::after {
+
+    content: "";
+
+    position: fixed;
+
+    width: 420px;
+    height: 420px;
+
+    border-radius: 50%;
+
+    filter: blur(110px);
+
+    opacity: .15;
+
+    pointer-events: none;
+
+    z-index: -1;
+
+    animation:
+        ambientFloat
+        13s
+        ease-in-out
+        infinite
+        alternate;
+}
+
+
+body::before {
+
+    top: -180px;
+    left: -140px;
+
+    background: #356cff;
+}
+
+
+body::after {
+
+    right: -160px;
+    bottom: -180px;
+
+    background: #8b5cf6;
+
+    animation-delay: -5s;
+}
+
+
+@keyframes ambientFloat {
+
+    from {
+        transform: translate3d(0,0,0) scale(1);
+    }
+
+    to {
+        transform: translate3d(30px,25px,0) scale(1.08);
+    }
+
+}
+
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+
 .topbar {
 
-    background: #111827;
+    height: 72px;
 
-    color: white;
+    position: sticky;
 
-    padding: 18px 30px;
+    top: 0;
+
+    z-index: 100;
 
     display: flex;
 
     align-items: center;
 
     justify-content: space-between;
+
+    padding: 0 32px;
+
+    background:
+        rgba(5,7,11,.78);
+
+    border-bottom:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(22px);
+
+    -webkit-backdrop-filter:
+        blur(22px);
 }
 
 
 .brand {
 
-    font-size: 22px;
+    display: flex;
 
-    font-weight: 700;
+    align-items: center;
 
-    letter-spacing: .5px;
+    gap: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: .4px;
+}
+
+
+.brand-mark {
+
+    width: 35px;
+    height: 35px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 10px;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 900;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--purple)
+        );
+
+    box-shadow:
+        0 0 30px rgba(91,140,255,.24);
+}
+
+
+.brand-name {
+
+    font-size: 16px;
+}
+
+
+.brand-name span {
+
+    color: #8d98aa;
+
+    font-weight: 500;
+
+    margin-left: 4px;
 }
 
 
 .back-btn {
 
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 9px 13px;
+
+    border-radius: 9px;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    background:
+        rgba(255,255,255,.025);
+
+    color: #c7cfdd;
+
     text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition:
+        .2s ease;
+}
+
+
+.back-btn:hover {
 
     color: white;
 
-    background: #374151;
+    background:
+        rgba(255,255,255,.06);
 
-    padding: 9px 15px;
+    border-color:
+        rgba(255,255,255,.14);
 
-    border-radius: 7px;
-
-    font-size: 14px;
+    transform:
+        translateY(-1px);
 }
 
+
+/* =========================================================
+   MAIN
+   ========================================================= */
 
 .container {
 
-    max-width: 1000px;
+    width:
+        min(100%, 1100px);
 
-    margin: 35px auto;
+    margin:
+        0 auto;
 
-    padding: 0 20px;
+    padding:
+        45px 24px 80px;
 }
 
 
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.page-header {
+
+    margin-bottom: 28px;
+
+    animation:
+        fadeUp
+        .55s
+        ease
+        both;
+}
+
+
+.eyebrow {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 12px;
+
+    color: #82a6ff;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.8px;
+
+    text-transform: uppercase;
+}
+
+
+.eyebrow-dot {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: var(--blue);
+
+    box-shadow:
+        0 0 0 4px rgba(91,140,255,.08),
+        0 0 15px rgba(91,140,255,.7);
+
+    animation:
+        pulse
+        2s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: .55;
+        transform: scale(.9);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+}
+
+
+.page-header h1 {
+
+    margin: 0;
+
+    font-size:
+        clamp(30px,5vw,44px);
+
+    line-height: 1.05;
+
+    letter-spacing: -1.8px;
+
+    font-weight: 800;
+}
+
+
+.page-header p {
+
+    margin:
+        13px 0 0;
+
+    max-width: 680px;
+
+    color: var(--muted);
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   TEST CONTEXT CARD
+   ========================================================= */
+
 .test-card {
 
-    background: white;
+    position: relative;
 
-    border: 1px solid #e5e7eb;
+    margin-bottom: 18px;
 
-    border-radius: 12px;
+    padding: 19px 22px;
 
-    padding: 20px 24px;
+    display: flex;
 
-    margin-bottom: 20px;
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(17,23,35,.88),
+            rgba(9,12,19,.92)
+        );
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    animation:
+        fadeUp
+        .55s
+        .05s
+        ease
+        both;
+}
+
+
+.test-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 3px;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--blue),
+            var(--purple)
+        );
+}
+
+
+.test-meta {
+
+    min-width: 0;
 }
 
 
 .test-label {
 
-    font-size: 12px;
+    color: #718096;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
 
     text-transform: uppercase;
 
-    color: #6b7280;
-
-    font-weight: 700;
-
-    letter-spacing: .7px;
+    margin-bottom: 6px;
 }
 
 
 .test-title {
 
-    margin-top: 6px;
+    font-size: 17px;
 
-    font-size: 22px;
+    font-weight: 750;
 
-    font-weight: 700;
+    color: #edf2f8;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
 }
 
 
 .question-number {
 
-    margin-top: 8px;
+    flex-shrink: 0;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(91,140,255,.07);
+
+    border:
+        1px solid rgba(91,140,255,.14);
+
+    color: #8eafff;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: .5px;
+}
+
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
+
+.alert {
+
+    margin-bottom: 18px;
+
+    padding: 13px 15px;
+
+    border-radius: 11px;
 
     font-size: 13px;
 
-    color: #6b7280;
+    line-height: 1.5;
+
+    animation:
+        fadeUp
+        .4s
+        ease
+        both;
 }
 
+
+.success {
+
+    color: #7de3a7;
+
+    background:
+        rgba(69,212,131,.07);
+
+    border:
+        1px solid rgba(69,212,131,.16);
+}
+
+
+.error {
+
+    color: #ff9baa;
+
+    background:
+        rgba(255,113,135,.07);
+
+    border:
+        1px solid rgba(255,113,135,.17);
+}
+
+
+/* =========================================================
+   MAIN EDITOR CARD
+   ========================================================= */
 
 .card {
 
-    background: white;
+    position: relative;
 
-    border: 1px solid #e5e7eb;
+    padding: 31px;
 
-    border-radius: 12px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20,25,38,.88),
+            rgba(9,12,19,.94)
+        );
 
-    padding: 28px;
+    border:
+        1px solid var(--border);
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.36),
+        inset 0 1px 0 rgba(255,255,255,.025);
+
+    overflow: hidden;
+
+    animation:
+        fadeUp
+        .65s
+        .1s
+        ease
+        both;
 }
 
 
-h1 {
+.card::before {
 
-    margin-top: 0;
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 10%;
+
+    width: 80%;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(91,140,255,.65),
+            rgba(139,92,246,.65),
+            transparent
+        );
+}
+
+
+.card::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    right: -170px;
+    top: -170px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(91,140,255,.07);
+
+    filter:
+        blur(70px);
+
+    pointer-events: none;
+}
+
+
+.card h1 {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin:
+        0 0 27px;
+
+    font-size: 21px;
+
+    letter-spacing: -.5px;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+form {
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+.field {
 
     margin-bottom: 25px;
-
-    font-size: 24px;
 }
 
 
@@ -614,11 +1185,15 @@ label {
 
     display: block;
 
-    font-size: 14px;
+    margin-bottom: 9px;
 
-    font-weight: 700;
+    color: #dce3ee;
 
-    margin-bottom: 8px;
+    font-size: 12px;
+
+    font-weight: 750;
+
+    letter-spacing: .2px;
 }
 
 
@@ -629,48 +1204,103 @@ input[type="file"] {
 
     width: 100%;
 
-    border: 1px solid #d1d5db;
+    border:
+        1px solid rgba(255,255,255,.09);
 
-    border-radius: 8px;
-
-    padding: 12px;
-
-    font-size: 15px;
+    border-radius: 11px;
 
     outline: none;
 
-    background: white;
+    background:
+        rgba(4,7,12,.72);
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
 }
 
 
 textarea {
 
-    min-height: 140px;
+    min-height: 155px;
+
+    padding: 15px;
 
     resize: vertical;
+
+    line-height: 1.65;
+}
+
+
+input[type="text"],
+input[type="number"] {
+
+    height: 49px;
+
+    padding:
+        0 14px;
+}
+
+
+input[type="file"] {
+
+    min-height: 49px;
+
+    padding: 12px 14px;
+
+    cursor: pointer;
+}
+
+
+input::placeholder,
+textarea::placeholder {
+
+    color: #596476;
+}
+
+
+textarea:hover,
+input:hover {
+
+    border-color:
+        rgba(255,255,255,.14);
 }
 
 
 textarea:focus,
 input:focus {
 
-    border-color: #111827;
+    border-color:
+        rgba(91,140,255,.7);
+
+    background:
+        rgba(7,10,17,.95);
+
+    box-shadow:
+        0 0 0 3px rgba(91,140,255,.08),
+        0 0 25px rgba(91,140,255,.05);
 }
 
 
-.field {
-
-    margin-bottom: 22px;
-}
-
+/* =========================================================
+   OPTIONS
+   ========================================================= */
 
 .options {
 
     display: grid;
 
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns:
+        1fr 1fr;
 
-    gap: 16px;
+    gap: 14px;
 }
 
 
@@ -684,13 +1314,11 @@ input:focus {
 
     position: absolute;
 
-    left: 12px;
+    left: 10px;
+    top: 10px;
 
-    top: 39px;
-
-    width: 30px;
-
-    height: 30px;
+    width: 29px;
+    height: 29px;
 
     display: flex;
 
@@ -698,13 +1326,22 @@ input:focus {
 
     justify-content: center;
 
-    background: #111827;
+    margin: 0;
+
+    border-radius: 7px;
 
     color: white;
 
-    border-radius: 6px;
+    background:
+        linear-gradient(
+            135deg,
+            #3c68d9,
+            #7250db
+        );
 
-    font-weight: 700;
+    font-size: 11px;
+
+    font-weight: 850;
 
     z-index: 2;
 
@@ -714,13 +1351,28 @@ input:focus {
 
 .option-box input {
 
-    padding-left: 55px;
+    padding-left: 51px;
 }
 
 
+/* =========================================================
+   CORRECT ANSWER
+   ========================================================= */
+
 .correct-section {
 
-    margin-top: 25px;
+    margin-top: 28px;
+
+    padding:
+        20px;
+
+    border-radius: 14px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    border:
+        1px solid rgba(255,255,255,.055);
 }
 
 
@@ -728,7 +1380,7 @@ input:focus {
 
     display: flex;
 
-    gap: 12px;
+    gap: 9px;
 
     flex-wrap: wrap;
 }
@@ -736,220 +1388,522 @@ input:focus {
 
 .correct-btn {
 
-    border: 1px solid #d1d5db;
+    min-width: 54px;
 
-    background: white;
+    height: 43px;
 
-    color: #374151;
+    padding:
+        0 18px;
 
-    padding: 12px 25px;
+    border:
+        1px solid rgba(255,255,255,.1);
 
-    border-radius: 8px;
+    border-radius: 9px;
 
-    font-weight: 700;
+    background:
+        rgba(255,255,255,.025);
+
+    color: #aeb8c8;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 800;
 
     cursor: pointer;
 
-    transition: .15s;
+    transition:
+        .2s ease;
 }
 
 
 .correct-btn:hover {
 
-    border-color: #111827;
+    color: white;
+
+    border-color:
+        rgba(91,140,255,.4);
+
+    background:
+        rgba(91,140,255,.07);
+
+    transform:
+        translateY(-1px);
 }
 
 
 .correct-btn.selected {
 
-    background: #111827;
-
     color: white;
 
-    border-color: #111827;
+    border-color:
+        transparent;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--purple)
+        );
+
+    box-shadow:
+        0 8px 25px rgba(91,140,255,.2);
 }
 
+
+.hint {
+
+    margin-top: 8px;
+
+    color: #687386;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   MARKS
+   ========================================================= */
 
 .marks-grid {
 
     display: grid;
 
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns:
+        1fr 1fr;
 
-    gap: 16px;
+    gap: 14px;
+
+    margin-top: 22px;
+}
+
+
+/* =========================================================
+   IMAGE
+   ========================================================= */
+
+.image-section {
 
     margin-top: 25px;
+
+    padding-top: 25px;
+
+    border-top:
+        1px solid rgba(255,255,255,.06);
 }
 
 
 .current-image {
 
-    margin-top: 10px;
-
-    max-width: 400px;
-
-    max-height: 250px;
-
     display: block;
 
-    border-radius: 8px;
+    max-width: 440px;
 
-    border: 1px solid #ddd;
+    max-height: 280px;
+
+    object-fit: contain;
+
+    margin:
+        10px 0 12px;
+
+    padding: 5px;
+
+    border-radius: 11px;
+
+    background:
+        rgba(0,0,0,.25);
+
+    border:
+        1px solid rgba(255,255,255,.1);
 }
 
 
 .image-preview {
 
-    margin-top: 12px;
-
-    max-width: 400px;
-
-    max-height: 250px;
-
-    border-radius: 8px;
-
     display: none;
 
-    border: 1px solid #ddd;
+    max-width: 440px;
+
+    max-height: 280px;
+
+    object-fit: contain;
+
+    margin-top: 13px;
+
+    padding: 5px;
+
+    border-radius: 11px;
+
+    background:
+        rgba(0,0,0,.25);
+
+    border:
+        1px solid rgba(91,140,255,.25);
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.25);
 }
 
 
 .remove-image {
 
-    margin-top: 10px;
-
-    display: flex;
+    display: inline-flex;
 
     align-items: center;
 
     gap: 8px;
 
-    font-size: 13px;
+    margin-top: 3px;
 
-    color: #991b1b;
+    color: #ff8d9f;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    cursor: pointer;
 }
 
 
 .remove-image input {
 
     width: auto;
+
+    accent-color: #ff7187;
+
 }
 
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.editor-divider {
+
+    height: 1px;
+
+    margin:
+        30px 0 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.08),
+            transparent
+        );
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
 
 .actions {
 
     display: flex;
 
+    align-items: center;
+
+    justify-content: space-between;
+
     gap: 12px;
 
-    margin-top: 30px;
-
-    flex-wrap: wrap;
+    margin-top: 25px;
 }
 
 
 .save-btn {
 
-    border: none;
+    position: relative;
 
-    background: #111827;
+    min-height: 48px;
+
+    padding:
+        0 24px;
+
+    border: 0;
+
+    border-radius: 11px;
+
+    overflow: hidden;
 
     color: white;
 
-    padding: 13px 24px;
+    background:
+        linear-gradient(
+            135deg,
+            #4d7fff,
+            #7457ed,
+            #8b5cf6
+        );
 
-    border-radius: 8px;
+    box-shadow:
+        0 12px 30px rgba(91,140,255,.22);
 
-    font-size: 15px;
+    font-family: inherit;
 
-    font-weight: 700;
+    font-size: 13px;
+
+    font-weight: 800;
 
     cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.save-btn::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    left: -80px;
+
+    width: 55px;
+
+    transform:
+        skewX(-18deg);
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.35),
+            transparent
+        );
+
+    transition:
+        left .55s ease;
 }
 
 
 .save-btn:hover {
 
-    background: #000;
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 17px 38px rgba(91,140,255,.3);
+}
+
+
+.save-btn:hover::before {
+
+    left:
+        calc(100% + 50px);
 }
 
 
 .questions-btn {
 
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 48px;
+
+    padding:
+        0 19px;
+
+    border-radius: 11px;
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+    background:
+        rgba(255,255,255,.025);
+
+    color: #b8c1cf;
+
     text-decoration: none;
 
-    background: #e5e7eb;
-
-    color: #111827;
-
-    padding: 13px 20px;
-
-    border-radius: 8px;
+    font-size: 13px;
 
     font-weight: 700;
+
+    transition:
+        .2s ease;
 }
 
 
-.alert {
+.questions-btn:hover {
 
-    padding: 14px 16px;
+    color: white;
 
-    border-radius: 8px;
+    background:
+        rgba(255,255,255,.055);
 
-    margin-bottom: 20px;
+    border-color:
+        rgba(255,255,255,.15);
 
-    font-size: 14px;
+    transform:
+        translateY(-1px);
 }
 
 
-.success {
+/* =========================================================
+   ANIMATION
+   ========================================================= */
 
-    background: #ecfdf5;
+@keyframes fadeUp {
 
-    color: #065f46;
+    from {
 
-    border: 1px solid #a7f3d0;
+        opacity: 0;
+
+        transform:
+            translateY(16px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+
+    }
+
 }
 
 
-.error {
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 
-    background: #fef2f2;
+@media (max-width: 750px) {
 
-    color: #991b1b;
+    .topbar {
 
-    border: 1px solid #fecaca;
-}
+        height: auto;
 
+        min-height: 68px;
 
-.hint {
-
-    font-size: 12px;
-
-    color: #6b7280;
-
-    margin-top: 6px;
-}
+        padding:
+            12px 16px;
+    }
 
 
-@media (max-width: 700px) {
+    .container {
+
+        padding:
+            32px 15px 60px;
+    }
+
 
     .options,
     .marks-grid {
 
-        grid-template-columns: 1fr;
+        grid-template-columns:
+            1fr;
     }
 
 
     .card {
 
-        padding: 20px;
+        padding:
+            22px 18px;
+
+        border-radius:
+            17px;
     }
 
 
-    .topbar {
+    .test-card {
 
-        padding: 15px;
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        padding:
+            17px;
+    }
+
+
+    .test-title {
+
+        white-space:
+            normal;
+    }
+
+
+    .actions {
+
+        flex-direction:
+            column-reverse;
+
+        align-items:
+            stretch;
+    }
+
+
+    .save-btn,
+    .questions-btn {
+
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .brand-name {
+
+        display: none;
+    }
+
+
+    .page-header h1 {
+
+        font-size:
+            32px;
+    }
+
+
+    .correct-btn {
+
+        flex: 1;
+
+        min-width:
+            0;
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration:
+            .01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            .01ms !important;
+
+        scroll-behavior:
+            auto !important;
     }
 
 }
@@ -962,10 +1916,22 @@ input:focus {
 <body>
 
 
+<!-- =========================================================
+     TOPBAR
+     ========================================================= -->
+
 <div class="topbar">
 
     <div class="brand">
-        MODUS CBT
+
+        <div class="brand-mark">
+            M
+        </div>
+
+        <div class="brand-name">
+            MODUS <span>CBT</span>
+        </div>
+
     </div>
 
 
@@ -980,35 +1946,76 @@ input:focus {
 
 
 
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
 <div class="container">
 
 
-    <!-- TEST INFORMATION -->
+    <!-- PAGE HEADER -->
 
-    <div class="test-card">
+    <div class="page-header">
 
-        <div class="test-label">
-            Editing question in
+        <div class="eyebrow">
+
+            <span class="eyebrow-dot"></span>
+
+            QUESTION EDITOR
+
         </div>
 
 
-        <div class="test-title">
+        <h1>
+            Edit Question
+        </h1>
 
-            <?= htmlspecialchars($test['title']) ?>
+
+        <p>
+            Modify the question, answer options, scoring,
+            and optional question image without changing
+            its position in the examination.
+        </p>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         TEST CONTEXT
+         ===================================================== -->
+
+    <div class="test-card">
+
+        <div class="test-meta">
+
+            <div class="test-label">
+                Editing question in
+            </div>
+
+
+            <div class="test-title">
+
+                <?= htmlspecialchars($test['title']) ?>
+
+            </div>
 
         </div>
 
 
         <div class="question-number">
 
-            Question
-            #<?= (int)$question['question_order'] ?>
+            Question #<?= (int)$question['question_order'] ?>
 
         </div>
 
     </div>
 
 
+
+    <!-- =====================================================
+         ALERTS
+         ===================================================== -->
 
     <?php if ($message): ?>
 
@@ -1019,7 +2026,6 @@ input:focus {
         </div>
 
     <?php endif; ?>
-
 
 
     <?php if ($error): ?>
@@ -1034,13 +2040,16 @@ input:focus {
 
 
 
+    <!-- =====================================================
+         EDITOR
+         ===================================================== -->
+
     <div class="card">
 
 
         <h1>
-            Edit Question
+            Question Configuration
         </h1>
-
 
 
         <form
@@ -1066,7 +2075,9 @@ input:focus {
 
 
 
-            <!-- QUESTION -->
+            <!-- =================================================
+                 QUESTION
+                 ================================================= -->
 
             <div class="field">
 
@@ -1078,19 +2089,28 @@ input:focus {
                 <textarea
                     id="question_text"
                     name="question_text"
+                    placeholder="Enter the question..."
                     required
                 ><?= htmlspecialchars($question_text) ?></textarea>
+
+
+                <div class="hint">
+                    Write the complete question exactly as it
+                    should appear to students.
+                </div>
 
             </div>
 
 
 
-            <!-- OPTIONS -->
+            <!-- =================================================
+                 OPTIONS
+                 ================================================= -->
 
             <div class="field">
 
                 <label>
-                    Options
+                    Answer Options
                 </label>
 
 
@@ -1166,7 +2186,9 @@ input:focus {
 
 
 
-            <!-- CORRECT ANSWER -->
+            <!-- =================================================
+                 CORRECT ANSWER
+                 ================================================= -->
 
             <div class="correct-section">
 
@@ -1178,14 +2200,10 @@ input:focus {
                 <div class="correct-buttons">
 
 
-                    <?php
+                    <?php foreach (
+                        ['A', 'B', 'C', 'D'] as $option
+                    ): ?>
 
-                    foreach (
-                        ['A', 'B', 'C', 'D']
-                        as $option
-                    ):
-
-                    ?>
 
                         <button
                             type="button"
@@ -1217,16 +2235,17 @@ input:focus {
 
 
                 <div class="hint">
-
-                    Click A, B, C or D to select the correct answer.
-
+                    Select the correct option. Keyboard shortcuts:
+                    1 = A, 2 = B, 3 = C, 4 = D.
                 </div>
 
             </div>
 
 
 
-            <!-- MARKS -->
+            <!-- =================================================
+                 MARKS
+                 ================================================= -->
 
             <div class="marks-grid">
 
@@ -1274,17 +2293,15 @@ input:focus {
 
 
 
-            <!-- IMAGE -->
+            <!-- =================================================
+                 IMAGE
+                 ================================================= -->
 
-            <div
-                class="field"
-                style="margin-top:25px;"
-            >
+            <div class="image-section">
 
                 <label>
                     Question Image
                 </label>
-
 
 
                 <?php if (!empty($current_image)): ?>
@@ -1312,7 +2329,7 @@ input:focus {
 
 
 
-                <div style="margin-top:15px;">
+                <div style="margin-top:18px;">
 
                     <label for="question_image">
 
@@ -1334,10 +2351,9 @@ input:focus {
                 </div>
 
 
-
                 <div class="hint">
 
-                    JPG, PNG or WEBP. Maximum 5 MB.
+                    JPG, PNG or WEBP · Maximum 5 MB
 
                 </div>
 
@@ -1352,29 +2368,31 @@ input:focus {
 
 
 
-            <!-- ACTIONS -->
+            <div class="editor-divider"></div>
+
+
+
+            <!-- =================================================
+                 ACTIONS
+                 ================================================= -->
 
             <div class="actions">
-
-
-                <button
-                    type="submit"
-                    class="save-btn"
-                >
-
-                    Save Changes
-
-                </button>
 
 
                 <a
                     href="questions.php?test_id=<?= $test_id ?>"
                     class="questions-btn"
                 >
-
                     Cancel
-
                 </a>
+
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+                    Save Changes
+                </button>
 
 
             </div>
@@ -1384,6 +2402,7 @@ input:focus {
 
     </div>
 
+
 </div>
 
 
@@ -1391,9 +2410,9 @@ input:focus {
 <script>
 
 
-// =========================================================
-// CORRECT ANSWER
-// =========================================================
+/* =========================================================
+   CORRECT ANSWER
+   ========================================================= */
 
 const correctButtons =
     document.querySelectorAll('.correct-btn');
@@ -1434,9 +2453,9 @@ correctButtons.forEach(button => {
 
 
 
-// =========================================================
-// IMAGE PREVIEW
-// =========================================================
+/* =========================================================
+   IMAGE PREVIEW
+   ========================================================= */
 
 const imageInput =
     document.getElementById(
@@ -1467,6 +2486,7 @@ imageInput.addEventListener(
                 '';
 
             return;
+
         }
 
 
@@ -1493,13 +2513,9 @@ imageInput.addEventListener(
 
 
 
-// =========================================================
-// KEYBOARD SHORTCUTS
-// 1 = A
-// 2 = B
-// 3 = C
-// 4 = D
-// =========================================================
+/* =========================================================
+   KEYBOARD SHORTCUTS
+   ========================================================= */
 
 document.addEventListener(
     'keydown',
@@ -1552,6 +2568,7 @@ document.addEventListener(
 
     }
 );
+
 
 </script>
 

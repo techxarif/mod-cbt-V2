@@ -143,7 +143,7 @@ body {
 
     position: relative;
 
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 
@@ -191,7 +191,6 @@ body {
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     font-size: 10px;
@@ -206,7 +205,7 @@ body {
 
 .header {
 
-    height: 82px;
+    min-height: 82px;
 
     background: white;
 
@@ -218,7 +217,9 @@ body {
 
     border-bottom: 1px solid #d5d5d5;
 
-    padding: 0 22px;
+    padding: 10px 22px;
+
+    gap: 20px;
 }
 
 
@@ -233,12 +234,16 @@ body {
     align-items: center;
 
     gap: 13px;
+
+    min-width: 0;
 }
 
 .logo {
 
     width: 55px;
     height: 55px;
+
+    flex-shrink: 0;
 
     border-radius: 50%;
 
@@ -264,6 +269,8 @@ body {
     display: flex;
 
     flex-direction: column;
+
+    min-width: 0;
 }
 
 .brand-name {
@@ -275,6 +282,8 @@ body {
     font-weight: 800;
 
     letter-spacing: 0.5px;
+
+    white-space: nowrap;
 }
 
 .brand-subtitle {
@@ -286,6 +295,8 @@ body {
     font-weight: 700;
 
     letter-spacing: 0.7px;
+
+    white-space: nowrap;
 }
 
 
@@ -295,19 +306,23 @@ body {
 
 .candidate-area {
 
-    height: 62px;
+    min-height: 62px;
 
     display: flex;
 
     align-items: center;
 
     gap: 9px;
+
+    flex-shrink: 0;
 }
 
 .candidate-photo {
 
     width: 52px;
     height: 52px;
+
+    flex-shrink: 0;
 
     border: 1px solid #888;
 
@@ -331,6 +346,8 @@ body {
     line-height: 17px;
 
     color: #555;
+
+    white-space: nowrap;
 }
 
 .candidate-label {
@@ -386,7 +403,7 @@ body {
 
 .login-area {
 
-    min-height: calc(100vh - 154px);
+    min-height: calc(100vh - 186px);
 
     display: flex;
 
@@ -394,15 +411,13 @@ body {
 
     justify-content: center;
 
-    padding: 40px 20px;
+    padding: 40px 20px 65px;
 
     position: relative;
 }
 
 
-/*
- * Decorative CBT background.
- */
+/* Decorative CBT background */
 
 .login-area::before {
 
@@ -489,6 +504,8 @@ body {
     padding: 9px 10px;
 
     margin-bottom: 14px;
+
+    overflow-wrap: anywhere;
 }
 
 
@@ -515,6 +532,8 @@ body {
 .input-wrapper {
 
     position: relative;
+
+    width: 100%;
 }
 
 .input {
@@ -534,6 +553,8 @@ body {
     color: #333;
 
     outline: none;
+
+    border-radius: 0;
 }
 
 .input:focus {
@@ -592,6 +613,8 @@ body {
     cursor: pointer;
 
     margin-top: 2px;
+
+    touch-action: manipulation;
 }
 
 .login-button:hover {
@@ -635,7 +658,7 @@ body {
     right: 0;
     bottom: 0;
 
-    height: 32px;
+    min-height: 32px;
 
     background: #063b68;
 
@@ -647,9 +670,51 @@ body {
 
     justify-content: center;
 
+    text-align: center;
+
+    padding: 7px 12px;
+
     font-size: 11px;
 
+    line-height: 15px;
+
     z-index: 10;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .header {
+
+        padding: 10px 15px;
+
+        gap: 15px;
+    }
+
+    .candidate-info {
+
+        font-size: 10px;
+    }
+
+    .candidate-label {
+
+        width: 82px;
+    }
+
+    .brand-name {
+
+        font-size: 22px;
+    }
+
+    .brand-subtitle {
+
+        font-size: 9px;
+    }
+
 }
 
 
@@ -659,53 +724,352 @@ body {
 
 @media (max-width: 650px) {
 
+    body {
+
+        min-width: 0;
+
+        overflow-x: hidden;
+    }
+
+
+    .login-page {
+
+        min-height: 100svh;
+    }
+
+
+    /* ---------------------------------------------
+       TOP BAR
+    --------------------------------------------- */
+
+    .top-bar {
+
+        height: 27px;
+
+        padding-right: 8px;
+
+        font-size: 11px;
+    }
+
+    .top-home {
+
+        padding: 0 5px;
+
+        gap: 5px;
+    }
+
+
+    /* ---------------------------------------------
+       HEADER
+    --------------------------------------------- */
+
     .header {
+
+        min-height: 76px;
 
         height: auto;
 
-        min-height: 82px;
-
         padding: 10px 12px;
 
-        gap: 10px;
+        justify-content: center;
+
+        gap: 0;
     }
 
-    .brand-name {
 
-        font-size: 19px;
+    .brand {
+
+        justify-content: center;
+
+        width: 100%;
     }
 
-    .brand-subtitle {
-
-        font-size: 8px;
-    }
 
     .logo {
 
         width: 45px;
         height: 45px;
 
+        border-width: 3px;
+
         font-size: 22px;
     }
+
+
+    .brand-name {
+
+        font-size: 20px;
+
+        letter-spacing: .3px;
+    }
+
+
+    .brand-subtitle {
+
+        font-size: 8px;
+
+        letter-spacing: .5px;
+    }
+
+
+    /* Hide desktop candidate block */
 
     .candidate-area {
 
         display: none;
     }
 
+
+    /* ---------------------------------------------
+       SYSTEM BAR
+    --------------------------------------------- */
+
+    .system-bar {
+
+        min-height: 49px;
+
+        padding: 6px 9px;
+    }
+
+
+    .system-name {
+
+        font-size: 14px;
+
+        line-height: 18px;
+    }
+
+
+    .system-warning {
+
+        font-size: 10px;
+
+        line-height: 13px;
+    }
+
+
+    /* ---------------------------------------------
+       LOGIN AREA
+    --------------------------------------------- */
+
     .login-area {
 
-        min-height: calc(100vh - 154px);
+        min-height: calc(100svh - 184px);
 
-        padding: 25px 15px 50px;
+        padding:
+
+            28px
+
+            14px
+
+            62px;
     }
+
+
+    /* ---------------------------------------------
+       LOGIN BOX
+    --------------------------------------------- */
 
     .login-box {
 
         width: 100%;
 
         max-width: 360px;
+
+        padding: 19px 15px 23px;
     }
+
+
+    .login-title {
+
+        font-size: 15px;
+
+        margin-bottom: 16px;
+    }
+
+
+    /* ---------------------------------------------
+       INPUTS
+    --------------------------------------------- */
+
+    .input {
+
+        height: 40px;
+
+        font-size: 14px;
+
+        padding-left: 11px;
+
+        padding-right: 40px;
+    }
+
+
+    .form-label {
+
+        font-size: 11px;
+
+        margin-bottom: 5px;
+    }
+
+
+    .form-group {
+
+        margin-bottom: 16px;
+    }
+
+
+    /* ---------------------------------------------
+       BUTTON
+    --------------------------------------------- */
+
+    .login-button {
+
+        height: 42px;
+
+        font-size: 13px;
+
+        border-radius: 2px;
+    }
+
+
+    /* ---------------------------------------------
+       HELP
+    --------------------------------------------- */
+
+    .login-help {
+
+        font-size: 11px;
+
+        line-height: 16px;
+
+        margin-top: 16px;
+    }
+
+
+    /* ---------------------------------------------
+       FOOTER
+    --------------------------------------------- */
+
+    .footer {
+
+        min-height: 34px;
+
+        padding: 7px 10px;
+
+        font-size: 9px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .header {
+
+        min-height: 68px;
+
+        padding: 8px 10px;
+    }
+
+
+    .logo {
+
+        width: 40px;
+        height: 40px;
+
+        font-size: 20px;
+    }
+
+
+    .brand-name {
+
+        font-size: 18px;
+    }
+
+
+    .brand-subtitle {
+
+        font-size: 7px;
+
+        letter-spacing: .35px;
+    }
+
+
+    .system-bar {
+
+        min-height: 55px;
+
+        padding: 6px 8px;
+    }
+
+
+    .system-name {
+
+        font-size: 13px;
+    }
+
+
+    .system-warning {
+
+        font-size: 9px;
+
+        line-height: 12px;
+    }
+
+
+    .login-area {
+
+        min-height: calc(100svh - 184px);
+
+        padding:
+
+            22px
+
+            10px
+
+            58px;
+    }
+
+
+    .login-box {
+
+        padding:
+
+            17px
+
+            13px
+
+            21px;
+    }
+
+
+    .login-title {
+
+        font-size: 14px;
+
+        padding-bottom: 10px;
+
+        margin-bottom: 14px;
+    }
+
+
+    .input {
+
+        height: 42px;
+
+        font-size: 14px;
+    }
+
+
+    .login-button {
+
+        height: 43px;
+    }
+
 }
 
 
@@ -713,29 +1077,151 @@ body {
    VERY SMALL SCREENS
 ========================================================= */
 
-@media (max-width: 400px) {
+@media (max-width: 330px) {
 
-    .brand-text {
+    .brand-subtitle {
 
         display: none;
     }
 
-    .brand {
 
-        margin: auto;
+    .brand-name {
+
+        font-size: 18px;
     }
 
-    .system-name {
-
-        font-size: 14px;
-    }
 
     .system-warning {
 
-        font-size: 10px;
+        display: none;
     }
+
+
+    .system-bar {
+
+        min-height: 35px;
+
+        display: flex;
+
+        align-items: center;
+    }
+
+
+    .login-area {
+
+        min-height: calc(100svh - 164px);
+    }
+
 }
 
+
+/* =========================================================
+   LANDSCAPE MOBILE
+========================================================= */
+
+@media (max-height: 500px) and (max-width: 800px) {
+
+    .header {
+
+        min-height: 62px;
+
+        padding: 7px 12px;
+    }
+
+
+    .logo {
+
+        width: 38px;
+        height: 38px;
+
+        font-size: 19px;
+    }
+
+
+    .brand-name {
+
+        font-size: 18px;
+    }
+
+
+    .brand-subtitle {
+
+        display: none;
+    }
+
+
+    .system-bar {
+
+        min-height: 40px;
+
+        padding: 4px 9px;
+    }
+
+
+    .system-name {
+
+        font-size: 13px;
+
+        line-height: 16px;
+    }
+
+
+    .system-warning {
+
+        display: none;
+    }
+
+
+    .login-area {
+
+        min-height: auto;
+
+        padding: 20px 14px 55px;
+
+        align-items: flex-start;
+    }
+
+
+    .login-box {
+
+        margin-top: 5px;
+    }
+
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+========================================================= */
+
+@media (hover: none) {
+
+    .login-button:hover {
+
+        background: #247fbc;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        scroll-behavior: auto !important;
+
+        transition: none !important;
+
+        animation: none !important;
+    }
+
+}
 </style>
 
 </head>
