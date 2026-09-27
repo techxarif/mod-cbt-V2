@@ -1,0 +1,40 @@
+## MODUS CBT — Fresh re-audit (v3)
+
+Verified live tree: `OLD CODE/` deleted, new `settings/index.php`, `settings/about.php`, `pdf/question_paper.php`, `404.php`, `favicon.ico`. Prior P0 **`password` → `password_hash` FIXED** — `students/import.php:171`, `add.php:28`, `edit.php:39`, `exam_session/login.php:33,41`, `auth/authenticate.php:33,37` all match `database.sql:46`. That unblocks fresh installs.
+
+### Ratings (6.8 → 7.4)
+
+| Ground | Score | Delta + evidence |
+|---|---|---|
+| **Security** | **7.6/10** | Infra solid: `session.php:22-66`, `csrf.php:14-92`, `error_handler.php:13-165`, IDOR scoped, timer `st.started_at`. But: login CSRF dead, `start.php` GET-write, new avatar vuln, QR fallback exfil |
+| **Architecture** | **6.8/10** | `bootstrap.php:10-43` on all 48 entries, `layout_header/footer` everywhere, `OLD CODE/` gone. But: `exam.php:3986` lines monolith, `header.php/sidebar.php/footer.php` 0 users, inline `style=` dozens per page |
+| **DB / Perf** | **7.2/10** | Bulk + transactions FIXED (`submit.php:59-281`, `save.php:72-193`, `assign.php:27-32`). But: indexes separate + MySQL-incompatible, 3 lists unbounded |
+| **Error handling** | **8.5/10** | ~40 catches → `app_log` + `Ref:` only, no `die($e->getMessage())`. Residual: 2 generic `die` fallbacks |
+| **Exam correctness** | **7.5/10** | Refresh-reset gone, POST-only 405 `submit.php:24-27`, `FOR UPDATE`, server expiry. Residual: `start.php` no txn |
+| **UI/UX** | **7.0/10** | Teacher shell unified, `settings.css:10461`, `404.php:17-83`, logo. Residual: exam CSS/JS not using `assets/` |
+| **Deployment** | **7.0/10** | `.env` + `.htaccess:33-35` deny, `installer/` gone. Residual: `.env` in docroot, stale `OLD CODE` rule, no uploads-php block |
+| **Overall** | **~7.4/10 beta, prod-gated on P1 list** | |
+
+### P1 — fix before prod
+
+**1. New avatar upload vuln — `settings/index.php:50-84`.** Ext-only `:56-57`, no `finfo`/`getimagesize` (unlike `includes/upload.php:83-89`), predictable `avatar_{id}_{time}.ext :67`, no `chmod`, `uploads/avatars/` has no `.htaccess`, old-file delete `:73-76` no `realpath` jail. Fix: route through `upload_question_image()`-style validator + `safe_unlink()` + `0644` + copy `questions/.htaccess`.
+
+**2. Indexes fragile — `database_indexes.sql:11-37`.** Correct 8-index set, but separate file + `ADD INDEX IF NOT EXISTS` is MariaDB-only (breaks stock MySQL/XAMPP 1064), comment `:4` “Safe” is false. Fix: merge into `database.sql` or portable guard via `INFORMATION_SCHEMA.STATISTICS`.
+
+**3. Login CSRF dead + `start.php` GET-write.** `auth/login.php:290`, `exam_session/login.php:205` render `csrf_field()` but handlers `:18-69` never verify; `authenticate.php:1-68` no token; `exam_session/start.php:1-47` `UPDATE started_at :35-40` via `int_param` GET with no method/token. Plus `helpers.php:132` bug `defined('is_json_request')` (always false) + 0 call-sites for `require_method()`. Fix: verify or drop dead fields, `require_method('POST')` on `start.php`, fix to `function_exists`.
+
+**4. Unbounded lists.** `get_test_results()` supports `LIMIT/OFFSET includes/tests.php:90-93` + `count_test_results():146-152` exists, but `results/index.php:18`, `pdf/result.php:21`, `qr/index.php:26` never paginate; `assignments/index.php:17-41` no limit + `NOT IN (SELECT)` → `NOT EXISTS`; `tests/index.php:10-19` 2× correlated counts + no pagination; `students/index.php:142` renders every page link. Fix: paginate 25/50 + `COUNT(*)`, window pager.
+
+**5. Rate-limit default wrong — `includes/rate_limit.php:28`.** Comment `:6` says 15 min, code default `$window=15` (seconds). Callers pass `900` so live logins OK, but any default call = 1200 tries/hr. Fix: default `900`. Still no throttle on `save/submit/import`, file-only single-host — acceptable, document.
+
+### P2 — cleanup
+
+**6. Exam monolith — `exam_session/exam.php:207-2216` CSS + `2867-3983` JS (3986 lines).** `assets/css/exam.css:649`, `js/exam.js:45`, `exam-timer.js:51` exist with 0 refs — inline re-implements them. Fix: `<link exam.css>` + `window.EXAM_CONFIG` + `<script src>`, then tighten CSP (`bootstrap.php:55` currently forced `unsafe-inline`).
+
+**7. Dead triple + shims.** `includes/header.php:1-40` / `sidebar.php:1-61` / `footer.php:1-11` have 0 live users (all use `layout.php:10-208`); `layout.php:97-106,125-131,172-188` duplicates `sidebar.php` + `ui.js:26-50`; `results/test.php:1-7`, `pdf/test_report.php:1-7` extra-hop shims; `pdf/question_paper.php:528` `$isInline` undefined; `tests.php:143 count_test_results`, `app.js:1-5` vs `ui.js:18-21` vs `exam.php:3977` triple `contextmenu`. Fix: delete/doc-legacy, 301 shims, fix `Attachment` flag.
+
+**8. `.htaccess` stale/incomplete.** Still blocks deleted `OLD CODE/ :24-25`, hardcodes `/modus-cbt/404.php :9`, no `uploads/*.php` exec block, no `vendor/.git/composer.json` deny, `config/database.php:9-15` fail-open `root/''`. Fix: drop stale rule, derive 404 path, add php-engine-off for `uploads/avatars/`, fail-closed if `.env` missing in prod.
+
+**9. Nits:** `tests/create.php:74,79` hardcodes `4.0/1.0` not `MARKS_CORRECT` (`config/database.php:60-61`); raw `value="<?= $id ?>"` in `assignments/index.php:58,74,87`, `results/index.php:35,51`, `questions/index.php:53,66` — cast/`e()`; CSV `students/import.php:105-112` `file_get_contents(tmp)` + unbounded `foreach:178-237` in one txn — add 2MB/5000-row cap + chunked commits; QR label “Encrypted” `qr/index.php:120` false (plain JSON to QuickChart fallback `:92-106`) — relabel/remove fallback; `APP_DEBUG=true` re-enables `display_errors` — keep `false` in prod.
+
+Order: P1-1 avatar → P1-2 indexes → P1-3 CSRF/method → P1-4 pagination → P1-5 rate default → P2 exam extraction + dead-code purge.

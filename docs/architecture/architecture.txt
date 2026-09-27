@@ -1,0 +1,48 @@
+                    ┌─────────────────┐
+                    │    DASHBOARD    │
+                    │ dashboard.php   │
+                    └────────┬────────┘
+                             │
+          ┌──────────────────┼──────────────────┐
+          ↓                  ↓                  ↓
+     STUDENTS              TESTS            QUESTIONS
+          │                  │                  │
+          ↓                  ↓                  ↓
+ import_students       create_test        add_question
+          │                  │                  │
+          │                  ↓                  ↓
+          │              tests.php        edit_question
+          │                  │                  │
+          │                  └────────┬─────────┘
+          │                           ↓
+          │                    assign_students
+          │                           │
+          └───────────────────────────┤
+                                      ↓
+                              ┌───────────────┐
+                              │ EXAM CONTROL  │
+                              │ exam_control  │
+                              └───────┬───────┘
+                                      │
+                         ┌────────────┼────────────┐
+                         ↓            ↓            ↓
+                       DRAFT       WAITING       ACTIVE
+                                      │            │
+                                      │            ↓
+                                      │      Student Runtime
+                                      │            │
+                                      │     exam_status.php
+                                      │            │
+                                      │            ↓
+                                      │      save_answer.php
+                                      │            │
+                                      └────────────┤
+                                                   ↓
+                                               COMPLETED
+                                                   │
+                                  ┌────────────────┼────────────────┐
+                                  ↓                ↓                ↓
+                              results.php     result_pdf.php    faculty_qr.php
+                                                                    │
+                                                                    ↓
+                                                           faculty_qr_image.php

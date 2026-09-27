@@ -1,0 +1,24 @@
+﻿# Environment file (never commit!)
+.env
+
+# Storage (logs, rate limits, etc.)
+storage/
+
+# Uploads
+uploads/*
+
+# PHP composer vendor
+vendor/
+
+# Logs
+storage/*
+
+# Security
+decrypter/*
+
+# Demo Data
+docs/demo/
+
+# OS files
+.DS_Store
+Thumbs.db

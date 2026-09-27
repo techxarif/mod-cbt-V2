@@ -1,13 +1,11 @@
-</main>
-
-<footer class="main-footer">
-
-    MODUS CBT
-
-</footer>
-
-<script src="../assets/js/app.js"></script>
-
+<?php
+// includes/footer.php
+$base = app_base_url();
+?>
+        </div>
+    </main>
+</div>
+<script src="<?= $base ?>assets/js/app.js"></script>
+<script src="<?= $base ?>assets/js/ui.js"></script>
 </body>
-
 </html>

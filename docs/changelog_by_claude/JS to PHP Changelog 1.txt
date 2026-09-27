@@ -1,0 +1,47 @@
+## MODUS CBT — Re-audit after your refactor
+
+Big progress: flat `admin/*.php + api/*.php + student/*.php` is gone. Now modular `auth/, dashboard/, tests/, questions/, students/, assignments/, exam_control/, exam_session/, answers/, results/, pdf/, qr/, includes/, config/`, with `includes/bootstrap.php`, `session.php`, `csrf.php`, `error_handler.php`, `rate_limit.php`, `upload.php`, `.env`, `database_indexes.sql`. Verified by direct reads.
+
+But one refactor regression breaks all student flows on a fresh install. That caps the scores below.
+
+### Ratings (was → now)
+
+| Ground | Score | Why |
+|---|---|---|
+| **Security** | **7.5/10** (was 4) | Fixed: session hardening `includes/session.php:22-65`, `session_regenerate_id` + cookie delete on both logouts, error leaks → `Ref:` only `includes/error_handler.php:62-112`, IDOR scoped (`exam_session/submit.php:61-77`, `answers/save.php:87-93`, `exam_control/status.php:32-44`), `.env` + `.htaccess:22-29` deny, timer now `st.started_at` (`answers/save.php:123-132`, `exam_session/submit.php:100-111`). Gaps: see P0/P1 |
+| **Architecture** | **6.5/10** (was 3) | Fixed: single `includes/bootstrap.php:10-40` adopted everywhere, `layout_header/footer` reused on all teacher pages, `includes/helpers.php` + `includes/tests.php` repos, consistent `resource/index,create,edit,delete` naming. Gaps: `exam_session/exam.php` 3985-line monolith, inline `style=` still everywhere, dead code |
+| **DB / Performance** | **6.0/10** (was 5) | Fixed: `dashboard/index.php:27-81` single aggregates, `assignments/assign.php:27-32` bulk `INSERT...SELECT`, `submit.php:196-215` chunked upsert(500), `save.php:157-168` single upsert, `students/index.php:6-45` paginated. Gaps: P0 schema mismatch + indexes not wired |
+| **Error handling / Quality** | **8.0/10** (was 4) | Fixed: `includes/error_handler.php:13-158` (`display_errors=0`, `app_log` + `abort_html/json`, global handlers), no `die($e->getMessage())` in new code, `e()` policy `includes/helpers.php:14-21`. Gaps: minor fallbacks |
+| **Exam correctness** | **7.0/10** (was 3) | Fixed: refresh-reset gone, `start.php:35-40` `WHERE started_at IS NULL`, `submit.php:24-27` POST-only 405 + `FOR UPDATE :61-77` + expiry check. Gaps: `start.php:14-40` no transaction |
+| **UI/UX** | **6.5/10** (was 5) | Fixed: teacher shell unified (`page-content/card/data-table/btn/badge`), `assets/css/admin.css:13140+dashboard.css+exam.css+responsive.css`, `js/app.js+ui.js`. Gaps: exam CSS/JS inlined instead of using those assets, divergent login shells |
+| **Deployment / Config** | **6.5/10** (was 3) | Fixed: `.env` + `.env.example`, `config/database.php:9-59` env-driven, `installer/` removed, `.htaccess` blocks `.env/*.sql`. Gaps: `.env` still in docroot (Apache-only protection), `OLD CODE/` ships |
+| **Overall** | **~6.8/10 — solid beta, not prod yet** | One P0 bug blocks prod |
+
+### P0 — must fix (broken on fresh `database.sql`)
+
+**1. `password` vs `password_hash` mismatch — student auth 100% broken.**
+`database.sql:46` column is `password_hash`, but you write/read `password` in 5 places (verified by read):
+`students/import.php:47`, `students/add.php:28`, `students/edit.php:39`, `exam_session/login.php:33,41`, `auth/authenticate.php:32,36`.
+Fresh install → import throws `Unknown column 'password'` → rollback, login `password_verify` reads nonexistent column. Fix: rename all to `password_hash`. Also `import.php:78-79` inserts `null` into `mobile NOT NULL database.sql:40` / `date_of_birth NOT NULL :43` — change to `''`/validated date or alter schema.
+
+### P1 — security / perf gaps
+
+**2. CSRF partial.** `includes/csrf.php:14-92` + `csrf_field()` correct, verified on `submit.php:33`, `questions/add.php:20`, `import.php:13`, `save.php:23`. But `auth/login.php:18-21` and `exam_session/login.php:18-21` emit `csrf_field()` (`:286`, `:201`) yet never `csrf_verify()` — login-CSRF open. `exam_session/start.php:1-43` does state-changing `UPDATE ... started_at` via GET with no token/method check. Fix: verify on both logins (or remove dead fields), add `require_method('POST')` + token to `start.php`. Note `includes/helpers.php:128-137` `require_method()` has 0 call-sites + `defined('is_json_request')` bug — fix to `function_exists`.
+
+**3. Indexes ship but never run.** `database_indexes.sql:11-37` has all 8 needed indexes, but not merged into `database.sql:30-298` and no installer references it. Fresh install = full scans + filesorts. Plus `ADD INDEX IF NOT EXISTS` is MariaDB-only, breaks MySQL 8. Fix: merge into `database.sql` + make migration MySQL-compatible (`CREATE INDEX` / existence check).
+
+**4. Unbounded lists remain.** `includes/tests.php:66-100` `get_test_results($limit=0)` → `fetchAll` unbounded; callers `results/index.php:18`, `qr/index.php:17`, `pdf/result.php:21` never paginate (`count_test_results():146` exists, unused). `assignments/index.php:17-40` unbounded + slow `NOT IN (SELECT...)` — switch to `LEFT JOIN...IS NULL` + `LIMIT/OFFSET`.
+
+**5. CSV import DoS + dead all-or-nothing.** `students/import.php:15-19` trusts `tmp_name`, no MIME/`finfo`, no size/row cap (`accept=.csv :127` client-only). One bad row → `rollBack :88` discards all. Fix: enforce 2MB / 5000-row cap, per-row try/catch with chunked commits, validate `mobile/DOB` formats.
+
+**6. QR fallback still exfils PII.** Primary local `chillerlan\QRCode qr/image.php:50-62` is good. But fallback `:68-83` POSTs full `{uid,name,score}` to QuickChart, and `:68` label says “Encrypted” — it’s plain JSON. Fix: remove fallback or encrypt + relabel + log consent.
+
+### P2 — cleanup
+
+**7. Delete `OLD CODE/` from docroot.** 9 files + nested `vendor/` + `composer.lock`, `config.php`, `teacher_signup.php` — ships legacy vulns. Move outside docroot or delete. Same for shims `results/test.php:1-7`, `pdf/test_report.php:1-7`, and triple `includes/header.php` vs `layout.php:10-127` vs `sidebar.php:1-53` (zero live users — only `OLD CODE/` references them).
+
+**8. Finish extraction.** `exam_session/exam.php:203-1300` 1000-line `<style>` + `2936-3980` JS inlines `assets/css/exam.css` / `js/exam.js,exam-timer.js` instead of using them; 20+ inline `style=` per teacher page (`questions/index.php:39-103`, `results/index.php:34-128`); `bootstrap.php:52` CSP still needs `unsafe-inline` because of this. Extract to utilities, then tighten CSP (`object-src, base-uri, form-action`, `Permissions-Policy`).
+
+**9. Minor:** `db.php:34` raw `die()` fallback bypasses `abort_html` styling; `csrf.php:59,88` same; `exam.php:24-27,66-68` silent redirects with no `app_log`; `exam_session/start.php:14-40` / `exam.php:80-91` need transaction + `FOR UPDATE`; `MARKS_CORRECT/WRONG config/database.php:58-59` only used in `questions/add.php:28-29`, scoring uses per-question marks — either wire globals or remove; `tests/create.php:13` `total_marks` is actually per-question marks — rename label.
+
+Fix order: P0 column rename → P1-3 indexes → P1-2 CSRF/method → P1-4 pagination → P1-5 CSV → P2 purge `OLD CODE/` + exam extraction.

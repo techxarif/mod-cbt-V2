@@ -1,0 +1,23 @@
+students
+   │
+   │ student_id
+   ↓
+student_tests
+   │
+   ├──────────── test_id ───────────→ tests
+   │
+   └──────────── student attempt
+                    │
+                    ↓
+                  answers
+
+
+questions
+   │
+   │ question_id
+   ↓
+test_questions
+   │
+   │ test_id
+   ↓
+tests

@@ -1,15 +1,13 @@
 <?php
 
-session_start();
+require_once __DIR__ . '/includes/bootstrap.php';
 
-if (isset($_SESSION['teacher_id'])) {
-    header('Location: admin/dashboard.php');
-    exit;
+if (teacherLoggedIn()) {
+    redirect('dashboard/index.php');
 }
 
-if (isset($_SESSION['student_id'])) {
-    header('Location: student/waiting.php');
-    exit;
+if (studentLoggedIn()) {
+    redirect('exam_session/index.php');
 }
 
 ?>
@@ -27,6 +25,9 @@ if (isset($_SESSION['student_id'])) {
     >
 
     <title>MODUS CBT</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
 
     <style>
 
@@ -1166,7 +1167,7 @@ if (isset($_SESSION['student_id'])) {
             <!-- TEACHER -->
 
             <a
-                href="login.php"
+                href="auth/login.php"
                 class="access-card"
             >
 
@@ -1203,7 +1204,7 @@ if (isset($_SESSION['student_id'])) {
             <!-- STUDENT -->
 
             <a
-                href="student/login.php"
+                href="exam_session/login.php"
                 class="access-card student"
             >
 
@@ -1243,7 +1244,7 @@ if (isset($_SESSION['student_id'])) {
 
                 New teacher?
 
-                <a href="teacher_signup.php">
+                <a href="auth/signup.php">
                     Create an account
                 </a>
 
